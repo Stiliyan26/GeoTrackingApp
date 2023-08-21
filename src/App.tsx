@@ -6,6 +6,9 @@ function App() {
   return (
     <>
       <Header />
+
+      <main className='main-container'>
+      </main>
     </>
   )
 }
