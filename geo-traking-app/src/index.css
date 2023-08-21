@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Chela+One&display=swap');
+
+:root {
+    --primary-color: hsl(201, 100%, 36%);
+    --text-color: #e7e7e7;
+    --text-hover-color: #f8f9fa;
+
+}
+
+body {
+    margin: 0;
+    font-family: 'Chela One', cursive;
+    font-size: 16px;
+}
+
+ul {
+    margin: 0px;
+    padding: 0px;
+}
