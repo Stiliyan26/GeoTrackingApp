@@ -1,11 +1,16 @@
 .main-container {
-    background-image: url('/public/images/background.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     width: 100%;
     min-height: 90vh;
+    background-image: url('/images/background3.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     position: relative;
+    /* center  */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     z-index: 1;
 }
 
@@ -18,5 +23,5 @@
     left: 0px;
     z-index: -1;
     background-color: black;
-    opacity: 0.6;
+    opacity: 0.4;
 }

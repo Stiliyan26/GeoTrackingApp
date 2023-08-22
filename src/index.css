@@ -1,10 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Chela+One&display=swap');
 
 :root {
-    --primary-color: hsl(201, 100%, 36%);
+    --primary-color: #023e8a;
     --text-color: #e0e0e0;
     --text-hover-color: #f8f9fa;
+}
 
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
 }
 
 body {
@@ -16,4 +21,8 @@ body {
 ul {
     margin: 0px;
     padding: 0px;
+}
+
+h2 {
+    margin: 0px;
 }

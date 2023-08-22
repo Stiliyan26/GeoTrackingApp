@@ -33,7 +33,7 @@
 .option .option-link::after {
     content: '';
     position: absolute;
-    background-color: #00b4d8;
+    background-color: #0077b6;
     height: 3px;
     width: 0%;
     left: 0;
