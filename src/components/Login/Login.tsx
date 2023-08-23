@@ -4,11 +4,23 @@ import { loginSchema } from '../../schemas/loginSchema';
 import { LoginFormInfo } from '../../types/types';
 
 import { useFormik } from "formik";
+import { useAuthContext } from '../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
 
-    const handleLogin = (loginFormInfo: LoginFormInfo) => {
-        console.log(loginFormInfo);
+    const { login } = useAuthContext();
+
+    const navigate = useNavigate();
+
+    const handleLogin = (loginFormInfo: LoginFormInfo, formikBag: any) => {
+        const info = {
+            username: loginFormInfo.username
+        }
+
+        login(info);
+        navigate('/');
+        formikBag.resetForm();
     }
 
     const { values, errors, touched, isSubmitting, handleSubmit, handleChange, handleBlur } = useFormik({
@@ -24,11 +36,11 @@ export default function Login() {
         <span className={styles['error-msg']}>{errorMessage}</span>
     )
 
-    const classNameValidator = (hasError: boolean, validaClassName: string, invalidClassName: string) => 
-        hasError 
+    const classNameValidator = (hasError: boolean, validaClassName: string, invalidClassName: string) =>
+        hasError
             ? `${styles[invalidClassName]}`
             : `${styles[validaClassName]}`
-           
+
     return (
         <div className={styles['wrapper']}>
             <div className={styles['title']}>Login Form</div>
@@ -36,10 +48,10 @@ export default function Login() {
             <form onSubmit={handleSubmit} className={styles['login-form']}>
                 <div className={styles['input-container']}>
                     <section className={styles['inp-wrapper']}>
-                        <i className={'fa-solid fa-user '+ classNameValidator(
-                                (!!errors.username && !!touched.username), 
-                                'icon', 
-                                'invalid-icon')}></i>
+                        <i className={'fa-solid fa-user ' + classNameValidator(
+                            (!!errors.username && !!touched.username),
+                            'icon',
+                            'invalid-icon')}></i>
                         <input
                             id='username'
                             className={classNameValidator(
@@ -57,10 +69,10 @@ export default function Login() {
 
                 <div className={styles['input-container']}>
                     <section className={styles['inp-wrapper']}>
-                    <i className={'fa-solid fa-lock ' + classNameValidator( 
-                                (!!errors.password && !!touched.password), 
-                                'icon', 
-                                'invalid-icon')}></i>
+                        <i className={'fa-solid fa-lock ' + classNameValidator(
+                            (!!errors.password && !!touched.password),
+                            'icon',
+                            'invalid-icon')}></i>
                         <input
                             id='password'
                             className={classNameValidator(
@@ -82,7 +94,7 @@ export default function Login() {
 
                 <div className={styles['btn-container']}>
                     <button
-                        type="submit"   
+                        type="submit"
                         disabled={isSubmitting}
                         className={styles['submit-btn']}
                     >
