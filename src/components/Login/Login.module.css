@@ -2,6 +2,7 @@
     width: 380px;
     border-radius: 20px;
     margin: 20px;
+    animation: slideInDown 1s ease-in-out forwards;
 }
 
 .wrapper .title {
@@ -150,5 +151,15 @@
     color: var(--error-color);
 }
 
-
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+     
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 

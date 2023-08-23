@@ -3,19 +3,44 @@ import styles from './Header.module.css';
 
 import { Link, useNavigate } from 'react-router-dom';
 
+interface NavOption {
+    name: string,
+    route: string,
+    icon: string,
+    isAlwaysIncluded?: boolean,
+    isAuthenticated?: boolean
+}
+
 export default function Header() {
     const { user, isAuthenticated, logout } = useAuthContext();
     const navigate = useNavigate();
 
-    const options = [
-        { name: 'Home', route: '/', icon: 'fa-regular fa-house-chimney', isAlwaysIncluded: true },
-        { name: 'Map', route: '/map', icon: 'fa-regular fa-location-dot fa-beat', isAuthenticated: true },
-        { name: 'Login', route: '/login', icon: 'fa-regular fa-user', isAuthenticated: false }
+    const options: NavOption[] = [
+        { 
+            name: 'Home',
+            route: '/',
+            icon: 'fa-regular fa-house-chimney',
+            isAlwaysIncluded: true
+        },
+        { 
+            name: 'Map',
+            route: '/map',
+            icon: 'fa-regular fa-location-dot fa-beat',
+            isAuthenticated: true,
+        },
+        { 
+            name: 'Login',
+            route: '/login',
+            icon: 'fa-regular fa-user',
+            isAuthenticated: false,
+        }
     ];
 
     const filters = {
-        isAuthenticated: (option: any) => option.isAuthenticated || option.isAlwaysIncluded,
-        isNotAuthenticated: (option: any) => !option.isAuthenticated || option.isAlwaysIncluded
+        isAuthenticated: (option: NavOption) => 
+            option.isAuthenticated || option.isAlwaysIncluded,
+        isNotAuthenticated: (option: NavOption) =>
+            !option.isAuthenticated || option.isAlwaysIncluded
     }
 
     const getAllOptions = () => {
