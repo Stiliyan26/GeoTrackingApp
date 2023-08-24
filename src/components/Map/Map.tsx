@@ -1,20 +1,21 @@
 import styles from './Map.module.css';
+import "leaflet/dist/leaflet.css";
 
 import PointOfInterestForm from '../PointsOfInterestForm/PointsOfInterestForm';
 
-import { PointOfInterest } from '../../interfaces/pointInterfaces';
+import { FormInputData, PointOfInterest } from '../../interfaces/pointInterfaces';
 
 import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 
 export default function Map() {
-	const initialPosition: [number, number] = [51.505, -0.09];
 	const [pointsOfInterst, setPointsOfInterest] = useState<PointOfInterest[]>([]);
 	const [showForm, setShowForm] = useState<boolean>(false);
 	const [selectedPosition, setSelectedPosition] = useState<[number, number] | null>(null);
 
-	const handleFormSubmit = (formData: PointOfInterest) => {
+	const initialPosition: [number, number] = [51.505, -0.09];
+
+	const handleFormSubmit = (formData: FormInputData) => {
 		if (selectedPosition) {
 			const newPointOfInterest: PointOfInterest = {
 				position: selectedPosition,
@@ -31,12 +32,17 @@ export default function Map() {
 	function MyMapEvents() {
 		useMapEvents({
 			click: (e) => {
-				console.log([e.latlng.lat, e.latlng.lng]);
 				setSelectedPosition([e.latlng.lat, e.latlng.lng]);
 				setShowForm(true);
 			}
 		});
 		return null;
+	}
+
+	function handleFormClose(e: MouseEvent) {
+		if (e.target === e.currentTarget) {
+			setShowForm(false);
+		}
 	}
 
 	const getAllPoints = () => {
@@ -59,7 +65,7 @@ export default function Map() {
 			<MapContainer
 				center={initialPosition}
 				zoom={13}
-				style={{ height: '100%', width: '100%' }}
+				style={{ height: '100%', width: '100%'}}
 			>
 				<TileLayer
 					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -71,9 +77,7 @@ export default function Map() {
 				{pointsOfInterst.length > 0 && getAllPoints()}
 
 				{showForm && (
-					<div className={styles['form-container']}>
-						<PointOfInterestForm onSubmit={handleFormSubmit} />
-					</div>
+					<PointOfInterestForm onCreate={handleFormSubmit} onClose={handleFormClose} />
 				)}
 			</MapContainer>
 		</div>

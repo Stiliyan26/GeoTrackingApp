@@ -1,53 +1,52 @@
 import styles from './PointsOfInterestForm.module.css';
 
-import { useState } from "react";
-import { PointOfInterest } from "../../interfaces/pointInterfaces";
+import FormInput from '../FormInput/FormInput';
 
-interface PointsOfInterestFormProps {
-    onSubmit: (formData: PointOfInterest) => void
-}
+import { PointOfInterestFormProps, FormInputData } from "../../interfaces/pointInterfaces";
+import { createPointScehma } from '../../schemas/schemas';
 
-export default function PointsOfInterestForm({ onSubmit }: PointsOfInterestFormProps) {
-    const [formData, setFormData] = useState<PointOfInterest>({
-        name: '',
-        description: '',
-        category: '',
-        position: [0, 0],
-    });
+import { useFormik } from "formik";
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
+export default function PointsOfInterestForm({ onCreate, onClose }: PointOfInterestFormProps) {
 
-        setFormData((prevData) => ({ ...prevData, [name]: value }));
-    }
+  const handleCreate = (formData: FormInputData) => {
+    onCreate(formData);
+  }
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        onSubmit(formData);
-    }
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      category: '',
+      description: ''
+    },
+    validationSchema: createPointScehma,
+    onSubmit: handleCreate
+  })
 
-    return (
-        <div className={styles['modal-overlay']}>
-        <div className={styles['form-container']}>
-          <form onSubmit={handleSubmit}>
-            <h2>Add Point of Interest</h2>
-            <label>
-              Name:
-              <input type="text" name="name" value={formData.name} onChange={handleChange} />
-            </label>
-            <label>
-              Description:
-              <textarea name="description" value={formData.description} onChange={handleChange} />
-            </label>
-            <label>
-              Category:
-              <input type="text" name="category" value={formData.category} onChange={handleChange} />
-            </label>
-            <button type="submit">Add</button>
-          </form>
-        </div>
+  return (
+    <div onClick={onClose} className={styles['overlay']}>
+      <div className={styles['wrapper']}>
+
+        <h2 className={styles['title-wrapper']}>
+          <span className={styles['title']}>Create</span>
+          <i className="fa-sharp fa-regular fa-location-dot"></i>
+        </h2>
+
+        <form onSubmit={formik.handleSubmit} className={styles['create-point-form']}>
+          <section className={styles['field-container']}>
+            <FormInput formik={formik} />
+          </section>
+
+          <button
+            type="submit"
+            className={styles['add-btn']}
+          >
+            Create location
+          </button>
+        </form>
       </div>
-    )
+    </div>
+  )
 }
 
 

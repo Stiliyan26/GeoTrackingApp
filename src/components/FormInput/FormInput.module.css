@@ -1,0 +1,57 @@
+.input-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 2em;
+    margin-bottom: 1em;
+}
+
+.label {
+    animation: glowingText 3s ease-in-out infinite;
+}
+
+.input,
+.textarea,
+.invalid-input,
+.invalid-textarea {
+    padding: 15px;
+    font-size: 0.6em;
+    border-radius: 1em;
+}
+
+.input:focus,
+.textarea:focus,
+.invalid-input:focus,
+.invalid-textarea:focus {
+    border: 3px solid #000000;
+    box-shadow: inset 0px 0px 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.textarea {
+    height: 100px;
+}
+
+.err-msg {
+    margin-top: 10px;
+    color: var(--error-color);
+    font-size: 0.8em;
+}
+
+.invalid-input,
+.invalid-textarea {
+    border: 3px solid var(--error-color);
+}
+
+@keyframes glowingText {
+    0% {
+        text-shadow: 0 0 5px #d5d9de;
+    }
+
+    50% {
+        text-shadow: 0 0 10px #d5d9de;
+    }
+
+    100% {
+        text-shadow: 0 0 5px #d5d9de;
+    }
+}

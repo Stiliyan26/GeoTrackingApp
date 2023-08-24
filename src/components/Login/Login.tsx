@@ -1,7 +1,9 @@
 import styles from './Login.module.css';
 
-import { loginSchema } from '../../schemas/loginSchema';
+import { loginSchema } from '../../schemas/schemas';
 import { LoginFormInfo } from '../../types/types';
+
+import { classNameValidator } from '../../services/service';
 
 import { useFormik } from "formik";
 import { useAuthContext } from '../../contexts/AuthContext';
@@ -36,11 +38,6 @@ export default function Login() {
         <span className={styles['error-msg']}>{errorMessage}</span>
     )
 
-    const classNameValidator = (hasError: boolean, validaClassName: string, invalidClassName: string) =>
-        hasError
-            ? `${styles[invalidClassName]}`
-            : `${styles[validaClassName]}`
-
     return (
         <div className={styles['wrapper']}>
             <div className={styles['title']}>Login Form</div>
@@ -49,13 +46,19 @@ export default function Login() {
                 <div className={styles['input-container']}>
                     <section className={styles['inp-wrapper']}>
                         <i className={'fa-solid fa-user ' + classNameValidator(
+                            styles,
                             (!!errors.username && !!touched.username),
                             'icon',
-                            'invalid-icon')}></i>
+                            'invalid-icon')}>
+                        </i>
                         <input
                             id='username'
                             className={classNameValidator(
-                                (!!errors.username && !!touched.username), 'input', 'invalid-input')}
+                                styles,
+                                (!!errors.username && !!touched.username),
+                                'input', 
+                                'invalid-input'
+                            )}
                             type='text'
                             placeholder='Username'
                             onChange={handleChange}
@@ -70,13 +73,18 @@ export default function Login() {
                 <div className={styles['input-container']}>
                     <section className={styles['inp-wrapper']}>
                         <i className={'fa-solid fa-lock ' + classNameValidator(
+                            styles,
                             (!!errors.password && !!touched.password),
                             'icon',
                             'invalid-icon')}></i>
                         <input
                             id='password'
                             className={classNameValidator(
-                                (!!errors.password && !!touched.password), 'input', 'invalid-input')}
+                                styles,
+                                (!!errors.password && !!touched.password), 
+                                'input', 
+                                'invalid-input'
+                            )}
                             type='password'
                             placeholder='Password'
                             onChange={handleChange}
