@@ -12,16 +12,16 @@ export const loginSchema = yup.object().shape({
 });
 
 export const createPointScehma = yup.object({
-    name: yup.string(),
-        //.required('Name is required!')
-        //.min(5, 'Name must be at least 5 characters!')
-        //.max(50, 'Name must less than 50 characters!'),
-    category: yup.string(),
-        //.required('Category is required!')
-        //.min(5, 'Category must be at least 5 characters!')
-        //.max(50, 'Category must less than 50 characters!'),
+    name: yup.string()
+        .required('Name is required!')
+        .min(5, 'Name must be at least 5 characters!')
+        .max(50, 'Name must less than 50 characters!'),
+    category: yup.string()
+        .required('Category is required!')
+        .min(5, 'Category must be at least 5 characters!')
+        .max(50, 'Category must less than 50 characters!'),
     description: yup.string()
-        //.required('Description is required!')
-        // .min(5, 'Description must be at least 5 characters!')
-        // .max(50, 'Description must less than 50 characters!')
+        .required('Description is required!')
+        .min(5, 'Description must be at least 5 characters!')
+        .max(50, 'Description must less than 50 characters!')
 });

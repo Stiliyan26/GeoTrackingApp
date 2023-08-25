@@ -1,8 +1,14 @@
-.map-container {
+.container {
     width: 70vh;
     height: 70vh;
     z-index: 1;
     position: relative;
-    transition: pointer-events 0.3s;
 }
+
+.map-container {
+    height: 100%;
+    width: 100%;
+    border-radius: 2em;
+}
+
 

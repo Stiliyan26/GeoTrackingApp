@@ -6,14 +6,16 @@ import PointOfInterestForm from '../PointsOfInterestForm/PointsOfInterestForm';
 import { FormInputData, PointOfInterest } from '../../interfaces/pointInterfaces';
 
 import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from "react-leaflet";
-import { useState, MouseEvent } from 'react';
+import { useState, MouseEvent, useRef, useEffect } from 'react';
 
 export default function Map() {
 	const [pointsOfInterst, setPointsOfInterest] = useState<PointOfInterest[]>([]);
 	const [showForm, setShowForm] = useState<boolean>(false);
 	const [selectedPosition, setSelectedPosition] = useState<[number, number] | null>(null);
 
-	const initialPosition: [number, number] = [51.505, -0.09];
+	const mapRef = useRef<any>(null);
+
+	const initialPosition: [number, number] = [42.6977, 23.3219];
 
 	const handleFormSubmit = (formData: FormInputData) => {
 		if (selectedPosition) {
@@ -36,6 +38,7 @@ export default function Map() {
 				setShowForm(true);
 			}
 		});
+
 		return null;
 	}
 
@@ -60,12 +63,24 @@ export default function Map() {
 			));
 	}
 
+	// Disable dragging when form is opened
+	useEffect(() => {
+		if (mapRef.current) {
+			const mapInstance = mapRef.current;
+
+			showForm === true
+				? mapInstance.dragging.disable()
+				: mapInstance.dragging.enable();
+		}
+	}, [showForm]);
+
 	return (
-		<div className={styles['map-container']}>
+		<div className={styles['container']}>
 			<MapContainer
 				center={initialPosition}
 				zoom={13}
-				style={{ height: '100%', width: '100%'}}
+				className={styles['map-container']}
+				ref={mapRef}
 			>
 				<TileLayer
 					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
