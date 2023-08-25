@@ -3,7 +3,7 @@ import styles from './Login.module.css';
 import { loginSchema } from '../../schemas/schemas';
 import { LoginFormInfo } from '../../types/types';
 
-import { classNameValidator } from '../../services/service';
+import { classNameValidator } from '../../services/styleServices';
 
 import { useFormik } from "formik";
 import { useAuthContext } from '../../contexts/AuthContext';

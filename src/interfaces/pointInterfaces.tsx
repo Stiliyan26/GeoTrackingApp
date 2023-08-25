@@ -9,7 +9,7 @@ export interface PointOfInterest {
     category: string
 }
 
-export interface PointOfInterestFormProps {
+export interface CreatePointFormProps {
     onCreate: (formData: FormInputData) => void,
     onClose: (e: MouseEvent) => void
 }
@@ -31,4 +31,9 @@ export interface FormInputData {
     name: string,
     category: string,
     description: string
+}
+
+export interface Coordinates {
+    latitude: number,
+    longitude: number
 }

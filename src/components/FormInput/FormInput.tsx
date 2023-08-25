@@ -2,7 +2,7 @@ import styles from './FormInput.module.css';
 
 import { FormInputProps, FormInputInfo } from '../../interfaces/pointInterfaces';
 
-import { classNameValidator } from '../../services/service';
+import { classNameValidator } from '../../services/styleServices';
 
 export default function FormInput({ formik }: FormInputProps) {
     const initialHtmlType = 'input';
