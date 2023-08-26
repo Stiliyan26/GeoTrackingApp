@@ -7,6 +7,8 @@ import Map from './components/Map/Map';
 
 import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from './contexts/AuthContext';
+import { PointProvider } from './contexts/PointContext';
+
 import GuestRoute from './guardedRoutes/GuestRoute';
 import UserRoute from './guardedRoutes/UserGuard';
 
@@ -14,21 +16,23 @@ function App() {
 
 	return (
 		<AuthProvider>
-			<Header />
+			<PointProvider>
+				<Header />
 
-			<main className='main-container'>
-				<Routes>
-					<Route path='/' element={<Home />} />
+				<main className='main-container'>
+					<Routes>
+						<Route path='/' element={<Home />} />
 
-					<Route element={<GuestRoute />}>
-						<Route path='/login' element={<Login />} />
-					</Route>
+						<Route element={<GuestRoute />}>
+							<Route path='/login' element={<Login />} />
+						</Route>
 
-					<Route element={<UserRoute />}>
-						<Route path='/map' element={<Map />} />
-					</Route>
-				</Routes>
-			</main>
+						<Route element={<UserRoute />}>
+							<Route path='/map' element={<Map />} />
+						</Route>
+					</Routes>
+				</main>
+			</PointProvider>
 		</AuthProvider>
 	)
 }

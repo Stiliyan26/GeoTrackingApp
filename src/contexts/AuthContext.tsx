@@ -1,9 +1,9 @@
 import { createContext, useContext } from "react"
 
 import { AuthData, AuthContextType, AuthProviderProps } from "../interfaces/authInterfaces";
-import useLocalStorage from "../hooks/useLocalStorage";
+import useAuthLocalStorage from "../hooks/useAuthLocalStorage";
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const initalValue: AuthData = {
     username: '',
@@ -12,7 +12,7 @@ const initalValue: AuthData = {
 export const AuthProvider: React.FC<AuthProviderProps> = ({
     children
 }) => {
-    const [user, setUser] = useLocalStorage<AuthData>('user', initalValue);
+    const [user, setUser] = useAuthLocalStorage<AuthData>('user', initalValue);
 
     const login = (authData: AuthData) => setUser(authData);
 
@@ -22,6 +22,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 
     const contextValue: AuthContextType = {
         user,
+        username: user.username,
         isAuthenticated,
         login,
         logout

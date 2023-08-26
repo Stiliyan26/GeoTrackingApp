@@ -1,15 +1,20 @@
 import styles from './Map.module.css';
 import "leaflet/dist/leaflet.css";
 
-import { FormInputData, PointOfInterest, Coordinates } from '../../interfaces/pointInterfaces';
+import { usePointContext } from '../../contexts/PointContext';
 
 import * as mapService from '../../services/mapService';
+import { FormInputData, PointOfInterest, Coordinates } from '../../interfaces/pointInterfaces';
 
-import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 import { useState, MouseEvent, useRef, useEffect } from 'react';
 import CreatePoint from '../PointsOfInterestForm/CreatePoint';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 export default function Map() {
+	const { username } = useAuthContext();
+	const { getPointsByUser, addPointByUser } = usePointContext();
+
 	const [pointsOfInterst, setPointsOfInterest] = useState<PointOfInterest[]>([]);
 	const [showForm, setShowForm] = useState<boolean>(false);
 	const [selectedPosition, setSelectedPosition] = useState<[number, number] | null>(null);
@@ -23,17 +28,15 @@ export default function Map() {
 
 	//Sets the current user location
 	useEffect(() => {
-		const fetchUserLocation = async () => {
-			try {
-				const coordinates = await mapService.findUserLocation(mapRef, initialPosition);
+		setPointsOfInterest(getPointsByUser(username));
 
+		mapService.findUserLocation(mapRef, initialPosition)
+			.then(coordinates => {
 				setUserCoordinates(coordinates);
-			} catch (error) {
+			})
+			.catch(error => {
 				console.error('Error fetching user location:', (error as Error).message);
-			}
-		}
-
-		fetchUserLocation();
+			});
 	}, []);
 
 	//Changes the dragging effect base on whether the form is opened
@@ -44,7 +47,14 @@ export default function Map() {
 	//Updates the pointsOfInterest and showFormState after creating new point
 	const handleFormSubmit = (formData: FormInputData) => {
 		mapService
-			.handleFormSubmit(selectedPosition, formData, setPointsOfInterest, setShowForm);
+			.handleFormSubmit(
+				selectedPosition,
+				formData,
+				setPointsOfInterest,
+				setShowForm,
+				addPointByUser,
+				username
+			);
 	}
 
 	function MyMapEvents() {
@@ -81,7 +91,7 @@ export default function Map() {
 				{!showForm && <MyMapEvents />}
 
 				{/* Renders all use's points of interest */}
-				{pointsOfInterst.length > 0 &&
+				{!!pointsOfInterst && pointsOfInterst.length > 0 &&
 					mapService.getAllPoints(pointsOfInterst)}
 
 				{/* Renders create form when  */}
@@ -94,7 +104,7 @@ export default function Map() {
 
 				{/* Renders current user location  */}
 				{!!userCoordinates
-					&& mapService.getUserPoint(userCoordinates)}
+					&& mapService.getUserPoint(userCoordinates, username, styles)}
 
 			</MapContainer>
 		</div>

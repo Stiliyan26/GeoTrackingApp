@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-function useLocalStorage<T>(key: string, initialValue: T) {
+function useAuthLocalStorage<T>(key: string, initialValue: T) {
     const [state, setState] = useState<T>(() => {
         try {
             const item = localStorage.getItem(key);
@@ -23,9 +23,7 @@ function useLocalStorage<T>(key: string, initialValue: T) {
 
             setState(value);
         } catch (error: unknown) {
-            if (error instanceof Error) {
-                console.log(error.message);
-            }
+            console.error((error as Error).message);
         }
     }
 
@@ -35,4 +33,4 @@ function useLocalStorage<T>(key: string, initialValue: T) {
     ] as const;
 }
 
-export default useLocalStorage;
+export default useAuthLocalStorage;

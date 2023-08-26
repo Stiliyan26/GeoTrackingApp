@@ -1,4 +1,4 @@
-import type { ChangeEvent, MouseEvent } from 'react';
+import type { ReactNode, MouseEvent } from 'react';
 
 import { FormikProps } from 'formik';
 
@@ -37,3 +37,19 @@ export interface Coordinates {
     latitude: number,
     longitude: number
 }
+
+export type PointsLocalStorage = {
+    [username: string]: PointOfInterest[]
+}
+
+export interface PointContextType {
+    points: PointsLocalStorage,
+    addPointByUser: (newPoint: PointOfInterest, username: string) => void,
+    getPointsByUser: (username: string) => PointOfInterest[]
+}
+
+export interface PointProviderProps {
+    children: ReactNode
+}
+
+export type AddPointByUserFunction = (newPoint: PointOfInterest, username: string) => void;
