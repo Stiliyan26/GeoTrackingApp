@@ -15,8 +15,9 @@
 .invalid-input,
 .invalid-textarea {
     padding: 15px;
-    font-size: 0.6em;
+    font-size: 0.7em;
     border-radius: 1em;
+    font-family: var(--primary-font);
 }
 
 .input:focus,

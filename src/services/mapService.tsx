@@ -1,18 +1,21 @@
 import { Dispatch, RefObject, SetStateAction } from "react";
-import { AddPointByUserFunction, Coordinates, FormInputData, PointOfInterest } from "../interfaces/pointInterfaces";
-import { Marker, Popup } from "react-leaflet";
-import L from "leaflet";
-
-
-import userLocationSvg from '../../public/images/user-location.svg';
-import interestLocationSvg from '../../public/images/interest-location.svg';
+import {
+    AddPointByUserFunction,
+    Coordinates,
+    FormInputData,
+    PointOfInterest
+} from "../interfaces/pointInterfaces";
 
 //Sets the current user location
 export const findUserLocation =
     async (mapRef: RefObject<any>, initialPosition: Coordinates): Promise<Coordinates> => {
+        const geoLocationOptions = {
+            enableHighAccuracy: true,
+            maximumAge: 10000,
+            timeout: 5000
+        }
+        
         return new Promise<Coordinates>((resolve) => {
-            const options = { enableHighAccuracy: true };
-
             if ('geolocation' in navigator) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
@@ -31,13 +34,14 @@ export const findUserLocation =
                         }
                         resolve(initialPosition);
                     },
-                    options
+                    geoLocationOptions
                 );
             } else {
                 resolve(initialPosition);
             }
         });
     }
+
 //Changes the dragging effect base on whether the form is opened
 export const changeDragging = (mapRef: RefObject<any>, showForm: boolean): void => {
     if (mapRef.current) {
@@ -64,6 +68,7 @@ export function handleFormSubmit(
             name: formData.name,
             description: formData.description,
             category: formData.category,
+            imageUrl: formData.imageUrl
         };
         // Update local storage
         addPointByUser(newPointOfInterest, username);
@@ -73,53 +78,5 @@ export function handleFormSubmit(
     }
 }
 
-//Returns all points of interest of the current user
-export const getAllPoints = (pointsOfInterst: PointOfInterest[]) => {
-    const customIcon = L.icon({
-        iconUrl: interestLocationSvg,
-        iconSize: [40, 40],
-    });
 
-    return pointsOfInterst
-        .map((poi, index) => (
-            <Marker 
-                key={index} 
-                position={poi.position}
-                icon={customIcon}
-            >
-                <Popup>
-                    <div>
-                        <h3>{poi.name}</h3>
-                        <p>{poi.description}</p>
-                        <p>Category: {poi.category}</p>
-                    </div>
-                </Popup>
-            </Marker>
-        ));
-}
 
-export const getUserPoint = (
-    userCoordinates: Coordinates,
-    username: string, 
-    styles: any
-) => {
-    const customIcon = L.icon({
-        iconUrl: userLocationSvg,
-        iconSize: [40, 40],
-    });
-
-    return (
-        <Marker 
-            position={[userCoordinates.latitude, userCoordinates.longitude]}
-            icon={customIcon}
-        >
-            <Popup>
-                <div className={styles['popup-container']}>
-                    <h3 className={styles['popup__title']}>{username}'s Location</h3>
-                    <p className={styles['popup__category']}>Current Location</p>
-                    <p className={styles['popup__description']}>This is my current location!</p>
-                </div>
-            </Popup>
-        </Marker>
-    )
-}

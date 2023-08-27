@@ -3,13 +3,16 @@ import "leaflet/dist/leaflet.css";
 
 import { usePointContext } from '../../contexts/PointContext';
 
+import CreatePoint from '../PointsOfInterestForm/CreatePoint';
+
 import * as mapService from '../../services/mapService';
+import * as mapUIService from '../../services/mapUIService';
 import { FormInputData, PointOfInterest, Coordinates } from '../../interfaces/pointInterfaces';
 
 import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 import { useState, MouseEvent, useRef, useEffect } from 'react';
-import CreatePoint from '../PointsOfInterestForm/CreatePoint';
 import { useAuthContext } from '../../contexts/AuthContext';
+import L, { map, popup } from 'leaflet';
 
 export default function Map() {
 	const { username } = useAuthContext();
@@ -59,7 +62,7 @@ export default function Map() {
 
 	function MyMapEvents() {
 		useMapEvents({
-			click: (e) => {
+			click: (e) => {				
 				setSelectedPosition([e.latlng.lat, e.latlng.lng]);
 				setShowForm(true);
 			}
@@ -92,7 +95,7 @@ export default function Map() {
 
 				{/* Renders all use's points of interest */}
 				{!!pointsOfInterst && pointsOfInterst.length > 0 &&
-					mapService.getAllPoints(pointsOfInterst)}
+					mapUIService.getAllPoints(pointsOfInterst)}
 
 				{/* Renders create form when  */}
 				{showForm && (
@@ -104,7 +107,7 @@ export default function Map() {
 
 				{/* Renders current user location  */}
 				{!!userCoordinates
-					&& mapService.getUserPoint(userCoordinates, username, styles)}
+					&& mapUIService.getUserPoint(userCoordinates, username)}
 
 			</MapContainer>
 		</div>

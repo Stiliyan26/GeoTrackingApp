@@ -6,7 +6,8 @@ export interface PointOfInterest {
     position: [number, number],
     name: string,
     description: string,
-    category: string
+    category: string,
+    imageUrl: string
 }
 
 export interface CreatePointFormProps {
@@ -30,7 +31,8 @@ export interface FormInputInfo {
 export interface FormInputData {
     name: string,
     category: string,
-    description: string
+    description: string,
+    imageUrl: string
 }
 
 export interface Coordinates {
@@ -53,3 +55,9 @@ export interface PointProviderProps {
 }
 
 export type AddPointByUserFunction = (newPoint: PointOfInterest, username: string) => void;
+
+
+export interface PointOfInterestProps {
+    point: PointOfInterest,
+    isUserLocation: boolean,
+}

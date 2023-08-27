@@ -17,7 +17,8 @@ export default function CreatePoint({ onCreate, onClose }: CreatePointFormProps)
     initialValues: {
       name: '',
       category: '',
-      description: ''
+      description: '',
+      imageUrl: ''
     },
     validationSchema: createPointScehma,
     onSubmit: handleCreate

@@ -31,7 +31,15 @@ export default function FormInput({ formik }: FormInputProps) {
             name: 'description',
             value: formik.values.description,
             placeholder: 'Type description: ',
-        }
+        },
+        {
+            id: 'imageUrl',
+            label: 'Image Url',
+            htmlType: 'input',
+            name: 'imageUrl',
+            value: formik.values.imageUrl,
+            placeholder: 'Type image url: ',
+        },
     ];
 
     const getFormikErrorByName: {
@@ -39,7 +47,8 @@ export default function FormInput({ formik }: FormInputProps) {
     } = {
         name: formik.errors.name,
         category: formik.errors.category,
-        description: formik.errors.description
+        description: formik.errors.description,
+        imageUrl: formik.errors.imageUrl    
     }
 
     const getIsFormikTouchedByName: {
@@ -47,7 +56,8 @@ export default function FormInput({ formik }: FormInputProps) {
     } = {
         name: formik.touched.name,
         category: formik.touched.category,
-        description: formik.touched.description
+        description: formik.touched.description,
+        imageUrl: formik.touched.imageUrl
     }
 
     
