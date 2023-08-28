@@ -14,10 +14,10 @@ const initialValue = {};
 export const PointProvider: React.FC<PointProviderProps> = ({
     children
 }) => {
-    const [points, setPoints] = usePointLocalStorage('points', initialValue);
+    const [points, addPoint] = usePointLocalStorage('points', initialValue);
 
     const addPointByUser: AddPointByUserFunction
-        = (newPoint, username) => setPoints(newPoint, username);
+        = (newPoint, username) => addPoint(newPoint, username);
 
     const getPointsByUser
         = (username: string) => 

@@ -23,25 +23,25 @@ export default function LocationInterestPoint(
         <Marker
             position={point.position}
             icon={customIcon}
-            eventHandlers={{
-                popupopen: (e) => console.log(e.target)
-            }}
         >
-            <StyledPopup autoPanPadding={[100, 100]} autoPan={true}>
+            <StyledPopup autoPanPadding={[150, 200]} autoPan={true}>
                 <div className={styles['popup-container']}>
                     <h3 className={styles['popup-name']}>
                         {point.name}
                     </h3>
+
                     <hr className={styles['separator']}></hr>
+
+                    <p className={styles['popup-category']}>
+                        <span>Category:</span>
+                        {point.category}
+                    </p>
 
                     <p className={styles['popup-description']}>
                         <span>Description:</span>
                         {point.description}
                     </p>
-                    <p className={styles['popup-category']}>
-                        <span>Category:</span>
-                        {point.category}
-                    </p>
+
                     <img
                         className={styles['popup-image']}
                         src={point.imageUrl}

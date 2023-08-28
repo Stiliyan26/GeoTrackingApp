@@ -1,4 +1,5 @@
 import LocationInterestPoint from "../components/LocationInterestPoint/LocationInterestPoint";
+import ListView from '../components/ListView/ListView';
 
 import { Coordinates, PointOfInterest } from "../interfaces/pointInterfaces";
 import { Popup } from "react-leaflet";
@@ -43,12 +44,7 @@ export const StyledPopup = styled(Popup)`
             color: red;
             font-size: 30px;
             margin: 10px;
-            transition: transform 0.3s ease;
-        }
-
-        a.leaflet-popup-close-button:hover {
-            color: red;
-            transform: rotate(180deg);
+            position: absolute;
         }
 
         .leaflet-popup-content-wrapper,
@@ -61,4 +57,20 @@ export const StyledPopup = styled(Popup)`
             padding: 13px 20px;
             margin: 0px;
         }
+
+        .leaflet-popup-content p {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
     `;
+
+const genereteRandomKey =() => {
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
+
+export const getListViewPoints = (pointsOfInterest: PointOfInterest[]) => {
+    return pointsOfInterest
+        .map(point => (
+            <ListView key={genereteRandomKey()} point={point}/>
+        ));
+}

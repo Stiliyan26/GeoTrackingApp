@@ -61,3 +61,7 @@ export interface PointOfInterestProps {
     point: PointOfInterest,
     isUserLocation: boolean,
 }
+
+export interface ListViewProps {
+    point: PointOfInterest
+}

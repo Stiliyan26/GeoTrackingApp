@@ -14,11 +14,11 @@ export const loginSchema = yup.object().shape({
 export const createPointScehma = yup.object({
     name: yup.string()
         .required('Name is required!')
-        .min(5, 'Name must be at least 5 characters!')
+        .min(4, 'Name must be at least 4 characters!')
         .max(20, 'Name must less than 20 characters!'),
     category: yup.string()
         .required('Category is required!')
-        .min(5, 'Category must be at least 5 characters!')
+        .min(4, 'Category must be at least 4 characters!')
         .max(20, 'Category must less than 20 characters!'),
     description: yup.string()
         .required('Description is required!')
@@ -27,5 +27,5 @@ export const createPointScehma = yup.object({
     imageUrl: yup.string()
         .required('Image Url is required!')
         .min(5, 'Category must be at least 5 characters!')
-        .max(200, 'Category must less than 200 characters!')
+        .max(300, 'Category must less than 300 characters!')
 });

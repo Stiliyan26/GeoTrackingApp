@@ -70,11 +70,12 @@ export function handleFormSubmit(
             category: formData.category,
             imageUrl: formData.imageUrl
         };
-        // Update local storage
-        addPointByUser(newPointOfInterest, username);
+        
         //Update local state
         setPointsOfInterest(prev => [...prev, newPointOfInterest]);
         setShowForm(false);
+        // Update local storage
+        addPointByUser(newPointOfInterest, username);
     }
 }
 

@@ -28,7 +28,7 @@ function usePointLocalStorage(key: string, initialValue: PointsLocalStorage) {
             setPoints(prev => {
                 const updatedPoints = { ...prev };
                 
-                if (updatedPoints[username]?.length === undefined) {
+                if (updatedPoints[username] === undefined) {
                     updatedPoints[username] = [];
                 }
 

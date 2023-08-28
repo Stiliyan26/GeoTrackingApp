@@ -12,7 +12,6 @@ import { FormInputData, PointOfInterest, Coordinates } from '../../interfaces/po
 import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 import { useState, MouseEvent, useRef, useEffect } from 'react';
 import { useAuthContext } from '../../contexts/AuthContext';
-import L, { map, popup } from 'leaflet';
 
 export default function Map() {
 	const { username } = useAuthContext();
@@ -29,10 +28,10 @@ export default function Map() {
 
 	const mapRef = useRef<any>(null);
 
-	//Sets the current user location
 	useEffect(() => {
+		//Retrives all points created by the user
 		setPointsOfInterest(getPointsByUser(username));
-
+		//Sets the current user location
 		mapService.findUserLocation(mapRef, initialPosition)
 			.then(coordinates => {
 				setUserCoordinates(coordinates);
@@ -62,7 +61,7 @@ export default function Map() {
 
 	function MyMapEvents() {
 		useMapEvents({
-			click: (e) => {				
+			click: (e) => {
 				setSelectedPosition([e.latlng.lat, e.latlng.lng]);
 				setShowForm(true);
 			}
@@ -79,37 +78,46 @@ export default function Map() {
 
 	return (
 		<div className={styles['container']}>
-			<MapContainer
-				center={[initialPosition.latitude, initialPosition.longitude]}
-				zoom={13}
-				className={styles['map-container']}
-				ref={mapRef}
-			>
-				<TileLayer
-					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-					url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-				/>
-
-				{/* Sets click event depending on showForm state */}
-				{!showForm && <MyMapEvents />}
-
-				{/* Renders all use's points of interest */}
-				{!!pointsOfInterst && pointsOfInterst.length > 0 &&
-					mapUIService.getAllPoints(pointsOfInterst)}
-
-				{/* Renders create form when  */}
-				{showForm && (
-					<CreatePoint
-						onCreate={handleFormSubmit}
-						onClose={handleFormClose}
+			<section className={styles['map-container']}>
+				<MapContainer
+					center={[initialPosition.latitude, initialPosition.longitude]}
+					zoom={13}
+					className={styles['map']}
+					ref={mapRef}
+				>
+					<TileLayer
+						attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+						url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 					/>
-				)}
 
-				{/* Renders current user location  */}
-				{!!userCoordinates
-					&& mapUIService.getUserPoint(userCoordinates, username)}
+					{/* Sets click event depending on showForm state */}
+					{!showForm && <MyMapEvents />}
 
-			</MapContainer>
+					{/* Renders all use's points of interest */}
+					{pointsOfInterst.length > 0 &&
+						mapUIService.getAllPoints(pointsOfInterst)}
+
+					{/* Renders create form when  */}
+					{showForm && (
+						<CreatePoint
+							onCreate={handleFormSubmit}
+							onClose={handleFormClose}
+						/>
+					)}
+
+					{/* Renders current user location  */}
+					{!!userCoordinates
+						&& mapUIService.getUserPoint(userCoordinates, username)}
+
+				</MapContainer>
+			</section>
+
+			<section className={styles['list-view']}>
+				<div className={styles['list-view-containter']}>
+					{pointsOfInterst.length > 0 &&
+						mapUIService.getListViewPoints(pointsOfInterst)}
+				</div>
+			</section>
 		</div>
 	)
 }
