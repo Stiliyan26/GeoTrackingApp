@@ -21,7 +21,7 @@ export default function Login() {
         }
 
         login(info);
-        navigate('/');
+        navigate('/map');
         formikBag.resetForm();
     }
 

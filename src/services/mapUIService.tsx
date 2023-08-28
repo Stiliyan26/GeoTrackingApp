@@ -3,6 +3,8 @@ import ListView from '../components/ListView/ListView';
 
 import { Coordinates, PointOfInterest } from "../interfaces/pointInterfaces";
 import { Popup } from "react-leaflet";
+import { MutableRefObject } from "react";
+
 import styled from "styled-components";
 
 //Returns user current location point
@@ -30,8 +32,9 @@ export const getUserPoint = (
 export const getAllPoints = (pointsOfInterst: PointOfInterest[]) => {
 
     return pointsOfInterst
-        .map((point, index) => (
-            <LocationInterestPoint key={index}
+        .map(point => (
+            <LocationInterestPoint 
+                key={genereteRandomKey()}
                 point={point}
                 isUserLocation={false}
             />
@@ -67,10 +70,19 @@ export const StyledPopup = styled(Popup)`
 const genereteRandomKey =() => {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
-
-export const getListViewPoints = (pointsOfInterest: PointOfInterest[]) => {
+//Retrives all user points
+export const getListViewPoints = (
+    pointsOfInterest: PointOfInterest[],
+    mapRef: MutableRefObject<any>,
+    isFirstRender: boolean
+) => {
     return pointsOfInterest
-        .map(point => (
-            <ListView key={genereteRandomKey()} point={point}/>
+        .map((point, index) => (
+            <ListView key={genereteRandomKey()} 
+                index={index}
+                point={point}
+                mapRef={mapRef}
+                isFirstRender={isFirstRender}
+            />
         ));
 }

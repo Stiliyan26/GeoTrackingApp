@@ -12,6 +12,7 @@ import { FormInputData, PointOfInterest, Coordinates } from '../../interfaces/po
 import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 import { useState, MouseEvent, useRef, useEffect } from 'react';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { boolean } from 'yup';
 
 export default function Map() {
 	const { username } = useAuthContext();
@@ -20,15 +21,18 @@ export default function Map() {
 	const [pointsOfInterst, setPointsOfInterest] = useState<PointOfInterest[]>([]);
 	const [showForm, setShowForm] = useState<boolean>(false);
 	const [selectedPosition, setSelectedPosition] = useState<[number, number] | null>(null);
+	const [isFirstRender, setIsFirstRender] = useState<boolean>(false);
 
 	const initialPosition: Coordinates
 		= { latitude: 42.6977, longitude: 23.3219 };
 
 	const [userCoordinates, setUserCoordinates] = useState<Coordinates>(initialPosition);
 
-	const mapRef = useRef<any>(null);
+	const mapRef = useRef<L.Map | null>(null);
 
+	//Sets all user points
 	useEffect(() => {
+		setIsFirstRender(true);
 		//Retrives all points created by the user
 		setPointsOfInterest(getPointsByUser(username));
 		//Sets the current user location
@@ -114,8 +118,11 @@ export default function Map() {
 
 			<section className={styles['list-view']}>
 				<div className={styles['list-view-containter']}>
-					{pointsOfInterst.length > 0 &&
-						mapUIService.getListViewPoints(pointsOfInterst)}
+					{/* Renders list view */}
+					{pointsOfInterst.length > 0
+						? mapUIService.getListViewPoints(pointsOfInterst, mapRef, isFirstRender)
+						: <p className={styles['no-locations']}>No locations yet!</p>
+					}
 				</div>
 			</section>
 		</div>

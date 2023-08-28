@@ -1,4 +1,4 @@
-import type { ReactNode, MouseEvent } from 'react';
+import type { ReactNode, MouseEvent, MutableRefObject } from 'react';
 
 import { FormikProps } from 'formik';
 
@@ -63,5 +63,8 @@ export interface PointOfInterestProps {
 }
 
 export interface ListViewProps {
-    point: PointOfInterest
+    index: number
+    point: PointOfInterest,
+    mapRef: MutableRefObject<L.Map | null>,
+    isFirstRender: boolean
 }

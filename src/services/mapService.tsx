@@ -8,7 +8,7 @@ import {
 
 //Sets the current user location
 export const findUserLocation =
-    async (mapRef: RefObject<any>, initialPosition: Coordinates): Promise<Coordinates> => {
+    async (mapRef: RefObject<L.Map | null>, initialPosition: Coordinates): Promise<Coordinates> => {
         const geoLocationOptions = {
             enableHighAccuracy: true,
             maximumAge: 10000,
@@ -43,7 +43,7 @@ export const findUserLocation =
     }
 
 //Changes the dragging effect base on whether the form is opened
-export const changeDragging = (mapRef: RefObject<any>, showForm: boolean): void => {
+export const changeDragging = (mapRef: RefObject<L.Map | null>, showForm: boolean): void => {
     if (mapRef.current) {
         const mapInstance = mapRef.current;
 
