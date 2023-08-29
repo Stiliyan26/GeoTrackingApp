@@ -3,6 +3,7 @@ import type { ReactNode, MouseEvent, MutableRefObject, SetStateAction, ChangeEve
 import { FormikProps } from 'formik';
 
 export interface PointOfInterest {
+    id: string,
     position: [number, number],
     name: string,
     description: string,
@@ -52,6 +53,7 @@ export interface PointContextType {
     points: PointsLocalStorage,
     addPointByUser: (newPoint: PointOfInterest, username: string) => void,
     getPointsByUser: (username: string) => PointOfInterest[]
+    deletePointById: (id: string, username: string) => void;
 }
 
 export interface PointProviderProps {
@@ -72,17 +74,25 @@ export interface ListLocationProps {
     index: number
     point: PointOfInterest,
     mapRef: MutableRefObject<L.Map | null>,
-    isFirstRender: boolean
+    isFirstRender: boolean,
+    handleDelete: (id: string, username: string) => void
 }
 
 export interface ListViewProps {
     setIsFirstRender: React.Dispatch<SetStateAction<boolean>>,
     pointsOfInterest: PointOfInterest[],
     mapRef: MutableRefObject<L.Map | null>,
-    isFirstRender: boolean
+    isFirstRender: boolean,
+    setPointsOfInterest: React.Dispatch<SetStateAction<PointOfInterest[]>>
 }
 
 export interface FilterSortBarProps {
     handleSetSortQuery: (name: string) => void; 
     handleSearchChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    searchQuery: string
 }
+
+export type DeletePointFunction = (
+    id: string,
+    username: string
+) => void;

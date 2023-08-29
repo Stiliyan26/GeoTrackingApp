@@ -1,12 +1,12 @@
 import styles from './ListView.module.css';
 
 import FilterSortBar from "./FilterSortBar/FilterSortBar";
-
-import * as mapUIService from '../../../services/mapUIService';
-
-import { ListViewProps, PointOfInterestWithIndex } from '../../../interfaces/pointInterfaces';
-import { ChangeEvent, useMemo, useState } from 'react';
 import ListLocation from './ListLocation/ListLocation';
+
+import { usePointContext } from '../../../contexts/PointContext';
+import { ListViewProps, PointOfInterestWithIndex } from '../../../interfaces/pointInterfaces';
+
+import { ChangeEvent, useMemo, useState } from 'react';
 
 interface SortQueries {
     [key: string]: (
@@ -18,8 +18,11 @@ export default function ListView({
     setIsFirstRender,
     pointsOfInterest,
     mapRef,
-    isFirstRender
+    isFirstRender,
+    setPointsOfInterest
 }: ListViewProps) {
+    const { deletePointById } = usePointContext();
+
     const [sortQuery, setSortQuery] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -44,16 +47,30 @@ export default function ListView({
             a.index - b.index
     }
 
+    function handleDelete(id: string, username: string) {
+        setIsFirstRender(false);
+        setPointsOfInterest(prev => {
+            let filteredPoints = prev;
+
+            filteredPoints = filteredPoints
+                .filter(point => point.id !== id)
+
+            return filteredPoints;
+        })
+        deletePointById(id, username);
+    }
+
     const mapPointsToComponents = (points: PointOfInterestWithIndex[]) => 
         points.map((point, index) => (
-            <ListLocation key={mapUIService.genereteRandomKey()}
+            <ListLocation key={point.id}
                 index={index}
                 point={point}
                 mapRef={mapRef}
                 isFirstRender={isFirstRender}
+                handleDelete={handleDelete}
             />
         ));
-
+            
     const getListOfLocations = useMemo(() => {
         const pointsOfInterestWithIndex = pointsOfInterest
             .map((point, index) => ({
@@ -83,6 +100,7 @@ export default function ListView({
             <FilterSortBar
                 handleSetSortQuery={handleSetSortQuery}
                 handleSearchChange={handleSearchChange}
+                searchQuery={searchQuery}
             />
 
             <hr></hr>

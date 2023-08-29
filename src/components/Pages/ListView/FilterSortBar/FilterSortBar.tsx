@@ -13,7 +13,8 @@ interface SortOptions {
 
 export default function FilterSortBar({
 	handleSetSortQuery,
-	handleSearchChange
+	handleSearchChange,
+	searchQuery
 }: FilterSortBarProps) {
 	const [isActive, setIsActive] = useState<boolean>(false);
 
@@ -60,6 +61,7 @@ export default function FilterSortBar({
 					type='text'
 					placeholder='Seach by name'
 					name='search-inp'
+					value={searchQuery}
 				/>
 
 				<i className="fa-solid fa-magnifying-glass"></i>

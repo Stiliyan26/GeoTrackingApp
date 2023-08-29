@@ -124,6 +124,7 @@ export default function Map() {
 					pointsOfInterest={pointsOfInterest}
 					mapRef={mapRef}
 					isFirstRender={isFirstRender}
+					setPointsOfInterest={setPointsOfInterest}
 				/>
 			</section>
 		</div>

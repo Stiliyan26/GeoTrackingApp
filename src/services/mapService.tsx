@@ -5,6 +5,7 @@ import {
     FormInputData,
     PointOfInterest
 } from "../interfaces/pointInterfaces";
+import { genereteRandomKey } from "./mapUIService";
 
 //Sets the current user location
 export const findUserLocation =
@@ -64,6 +65,7 @@ export function handleFormSubmit(
 ) {
     if (selectedPosition) {
         const newPointOfInterest: PointOfInterest = {
+            id: genereteRandomKey(),
             position: selectedPosition,
             name: formData.name,
             description: formData.description,

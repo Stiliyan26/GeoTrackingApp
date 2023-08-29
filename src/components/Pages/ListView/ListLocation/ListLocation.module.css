@@ -38,10 +38,14 @@
     font-size: 1.2em;
 }
 
-.locate-btn {
+.button-wrapper {
     display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.locate-btn, .delete-btn {
+    display: flex;
     border-radius: 1em;
     align-items: center;
     justify-content: center;
@@ -49,16 +53,32 @@
     flex-direction: column;
     font-family: var(--primary-font);
     font-size: 1.2em;
-    background-color: #225f87;
     color: var(--text-color);
     border: none;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+    outline: none;
+}
+
+.locate-btn {
+    flex-wrap: wrap;
+    gap: 5px;
+    background-color: #225f87;
 }
 
 .locate-btn:hover {
-    
     background-color: #256894;
+    transform: translateY(-2px);
+}
+
+.delete-btn {
+    background-color: #83000d;
+   
+}
+
+.delete-btn:hover {
+    color: var(--text-hover-color);
+    background-color: rgb(155, 1, 16);
     transform: translateY(-2px);
 }
 

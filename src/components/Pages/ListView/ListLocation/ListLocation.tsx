@@ -2,10 +2,12 @@ import styles from './ListLocation.module.css';
 
 import { ListLocationProps } from "../../../../interfaces/pointInterfaces";
 import { getProperClassName } from '../../../../services/styleServices';
+import { useAuthContext } from '../../../../contexts/AuthContext';
 
 export default function ListLocation(
-	{ index, point, mapRef, isFirstRender }: ListLocationProps
+	{ index, point, mapRef, isFirstRender, handleDelete }: ListLocationProps
 ) {
+	const { username } = useAuthContext();
 
 	const showCoordinates = () => {
 		return `[${point.position[0].toFixed(2)}, ${point.position[1].toFixed(2)}]`
@@ -30,7 +32,7 @@ export default function ListLocation(
 		>
 			<div className={styles['column']}>
 				<section className={styles['name-container']}>
-					<span className={styles['point-name']}>Name: {point.name}</span>
+					<span className={styles['point-name']}>{point.name}</span>
 					<i className="fa-sharp fa-regular fa-location-dot"></i>
 				</section>
 
@@ -40,10 +42,20 @@ export default function ListLocation(
 				</section>
 			</div>
 
-			<button onClick={handleLocate} className={styles['locate-btn']}>
-				<span className={styles['btn-name']}>Locate</span>
-				<span className={styles['btn-coordinates']}>{showCoordinates()}</span>
-			</button>
+			<div className={styles['button-wrapper']}>
+				<button onClick={handleLocate} className={styles['locate-btn']}>
+					<span className={styles['btn-name']}>Locate</span>
+					<span className={styles['btn-coordinates']}>{showCoordinates()}</span>
+				</button>
+
+				<button
+					onClick={() => handleDelete(point.id, username)}
+					className={styles['delete-btn']}
+				>
+					Delete
+				</button>
+			</div>
+
 		</section>
 	)
 }

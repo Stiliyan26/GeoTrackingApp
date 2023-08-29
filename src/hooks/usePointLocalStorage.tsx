@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
 import { PointOfInterest, PointsLocalStorage } from "../interfaces/pointInterfaces";
+
+import { useState, useEffect } from "react";
+
 
 function usePointLocalStorage(key: string, initialValue: PointsLocalStorage) {
     const [points, setPoints] = useState<PointsLocalStorage>(() => {
@@ -41,9 +43,27 @@ function usePointLocalStorage(key: string, initialValue: PointsLocalStorage) {
         }
     }
 
+    const deletePoint = (id: string, username: string) => {
+        try {
+            setPoints(prev => {
+                const filteredPoints = { ...prev };
+
+                if (filteredPoints[username] !== undefined){
+                    filteredPoints[username] = filteredPoints[username]
+                        .filter(point => point.id !== id);
+                }
+
+                return filteredPoints;
+            });
+        } catch (error) {
+            console.error((error as Error).message);
+        }
+    }
+
     return [
         points,
-        addPoint
+        addPoint,
+        deletePoint
     ] as const;
 }
 
