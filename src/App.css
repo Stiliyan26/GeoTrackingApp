@@ -1,6 +1,6 @@
 .main-container {
     width: 100%;
-    min-height: 90vh;
+    min-height: 90dvh;
     background-image: url('/images/background3.jpg');
     background-size: cover;
     background-position: center center;

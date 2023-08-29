@@ -1,4 +1,4 @@
-import type { ReactNode, MouseEvent, MutableRefObject } from 'react';
+import type { ReactNode, MouseEvent, MutableRefObject, SetStateAction, ChangeEvent } from 'react';
 
 import { FormikProps } from 'formik';
 
@@ -8,6 +8,10 @@ export interface PointOfInterest {
     description: string,
     category: string,
     imageUrl: string
+}
+
+export interface PointOfInterestWithIndex extends PointOfInterest{
+    index: number
 }
 
 export interface CreatePointFormProps {
@@ -54,17 +58,31 @@ export interface PointProviderProps {
     children: ReactNode
 }
 
-export type AddPointByUserFunction = (newPoint: PointOfInterest, username: string) => void;
-
+export type AddPointByUserFunction = (
+    newPoint: PointOfInterest,
+    username: string
+) => void;
 
 export interface PointOfInterestProps {
     point: PointOfInterest,
     isUserLocation: boolean,
 }
 
-export interface ListViewProps {
+export interface ListLocationProps {
     index: number
     point: PointOfInterest,
     mapRef: MutableRefObject<L.Map | null>,
     isFirstRender: boolean
+}
+
+export interface ListViewProps {
+    setIsFirstRender: React.Dispatch<SetStateAction<boolean>>,
+    pointsOfInterest: PointOfInterest[],
+    mapRef: MutableRefObject<L.Map | null>,
+    isFirstRender: boolean
+}
+
+export interface FilterSortBarProps {
+    handleSetSortQuery: (name: string) => void; 
+    handleSearchChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }

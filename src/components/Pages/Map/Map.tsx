@@ -1,27 +1,27 @@
 import styles from './Map.module.css';
 import "leaflet/dist/leaflet.css";
 
-import { usePointContext } from '../../contexts/PointContext';
+import { usePointContext } from '../../../contexts/PointContext';
 
-import CreatePoint from '../PointsOfInterestForm/CreatePoint';
+import CreatePoint from '../../Forms/CreatePoint/CreatePoint';
+import ListView from '../ListView/ListView';
 
-import * as mapService from '../../services/mapService';
-import * as mapUIService from '../../services/mapUIService';
-import { FormInputData, PointOfInterest, Coordinates } from '../../interfaces/pointInterfaces';
+import * as mapService from '../../../services/mapService';
+import * as mapUIService from '../../../services/mapUIService';
+import { FormInputData, PointOfInterest, Coordinates } from '../../../interfaces/pointInterfaces';
 
 import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 import { useState, MouseEvent, useRef, useEffect } from 'react';
-import { useAuthContext } from '../../contexts/AuthContext';
-import { boolean } from 'yup';
+import { useAuthContext } from '../../../contexts/AuthContext';
 
 export default function Map() {
 	const { username } = useAuthContext();
 	const { getPointsByUser, addPointByUser } = usePointContext();
 
-	const [pointsOfInterst, setPointsOfInterest] = useState<PointOfInterest[]>([]);
+	const [pointsOfInterest, setPointsOfInterest] = useState<PointOfInterest[]>([]);
 	const [showForm, setShowForm] = useState<boolean>(false);
 	const [selectedPosition, setSelectedPosition] = useState<[number, number] | null>(null);
-	const [isFirstRender, setIsFirstRender] = useState<boolean>(false);
+	const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
 
 	const initialPosition: Coordinates
 		= { latitude: 42.6977, longitude: 23.3219 };
@@ -32,7 +32,6 @@ export default function Map() {
 
 	//Sets all user points
 	useEffect(() => {
-		setIsFirstRender(true);
 		//Retrives all points created by the user
 		setPointsOfInterest(getPointsByUser(username));
 		//Sets the current user location
@@ -61,6 +60,8 @@ export default function Map() {
 				addPointByUser,
 				username
 			);
+
+		setIsFirstRender(false);
 	}
 
 	function MyMapEvents() {
@@ -68,6 +69,7 @@ export default function Map() {
 			click: (e) => {
 				setSelectedPosition([e.latlng.lat, e.latlng.lng]);
 				setShowForm(true);
+				setIsFirstRender(false);
 			}
 		});
 
@@ -98,8 +100,8 @@ export default function Map() {
 					{!showForm && <MyMapEvents />}
 
 					{/* Renders all use's points of interest */}
-					{pointsOfInterst.length > 0 &&
-						mapUIService.getAllPoints(pointsOfInterst)}
+					{pointsOfInterest.length > 0 &&
+						mapUIService.getAllPoints(pointsOfInterest)}
 
 					{/* Renders create form when  */}
 					{showForm && (
@@ -115,15 +117,14 @@ export default function Map() {
 
 				</MapContainer>
 			</section>
-
+			
 			<section className={styles['list-view']}>
-				<div className={styles['list-view-containter']}>
-					{/* Renders list view */}
-					{pointsOfInterst.length > 0
-						? mapUIService.getListViewPoints(pointsOfInterst, mapRef, isFirstRender)
-						: <p className={styles['no-locations']}>No locations yet!</p>
-					}
-				</div>
+				<ListView 
+					setIsFirstRender={setIsFirstRender}
+					pointsOfInterest={pointsOfInterest}
+					mapRef={mapRef}
+					isFirstRender={isFirstRender}
+				/>
 			</section>
 		</div>
 	)

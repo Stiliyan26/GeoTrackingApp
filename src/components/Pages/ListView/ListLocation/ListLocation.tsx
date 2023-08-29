@@ -1,10 +1,10 @@
-import styles from './ListView.module.css';
+import styles from './ListLocation.module.css';
 
-import { ListViewProps } from "../../interfaces/pointInterfaces";
-import { getProperClassName } from '../../services/styleServices';
+import { ListLocationProps } from "../../../../interfaces/pointInterfaces";
+import { getProperClassName } from '../../../../services/styleServices';
 
-export default function ListView(
-	{ index, point, mapRef, isFirstRender }: ListViewProps
+export default function ListLocation(
+	{ index, point, mapRef, isFirstRender }: ListLocationProps
 ) {
 
 	const showCoordinates = () => {
@@ -19,14 +19,14 @@ export default function ListView(
 	}
 
 	return (
-		<div 
+		<section
 			className={getProperClassName(
 				styles,
 				'point-info-container',
 				'point-info-container-with-anim',
 				isFirstRender
 			)}
-			style={{animationDelay: `${index * 0.2}s` }}
+			style={{ animationDelay: `${index * 0.2}s` }}
 		>
 			<div className={styles['column']}>
 				<section className={styles['name-container']}>
@@ -44,6 +44,6 @@ export default function ListView(
 				<span className={styles['btn-name']}>Locate</span>
 				<span className={styles['btn-coordinates']}>{showCoordinates()}</span>
 			</button>
-		</div>
+		</section>
 	)
 }

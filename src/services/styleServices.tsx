@@ -19,4 +19,15 @@ export const getProperClassName = (
         ? `${styles[withAnimClassName]}`
         : `${styles[withoutAnimClassName]}`;
 
+
+export const getClassNameByToggle = (
+    styles: any,
+    isActive: boolean, 
+    className: string, 
+    classNameToAdd: string
+)  => 
+		isActive 
+			? `${styles[className]} ${styles[classNameToAdd]}`
+			: `${styles[className]}`;
+
     

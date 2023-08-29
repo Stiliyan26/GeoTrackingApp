@@ -1,8 +1,8 @@
 import styles from './LocationInterestPoint.module.css';
 
-import { StyledPopup } from '../../services/mapUIService';
+import { StyledPopup } from '../../../services/mapUIService';
 
-import { PointOfInterestProps } from '../../interfaces/pointInterfaces'
+import { PointOfInterestProps } from '../../../interfaces/pointInterfaces'
 import interestLocationSvg from '/images/interest-location.svg';
 import userLocationSvg from '/images/user-location.svg';
 

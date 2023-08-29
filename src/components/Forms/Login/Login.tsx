@@ -1,12 +1,12 @@
 import styles from './Login.module.css';
 
-import { loginSchema } from '../../schemas/schemas';
-import { LoginFormInfo } from '../../types/types';
+import { loginSchema } from '../../../schemas/schemas';
+import { LoginFormInfo } from '../../../types/types';
 
-import { classNameValidator } from '../../services/styleServices';
+import { classNameValidator } from '../../../services/styleServices';
 
 import { useFormik } from "formik";
-import { useAuthContext } from '../../contexts/AuthContext';
+import { useAuthContext } from '../../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {

@@ -2,8 +2,8 @@ import styles from './CreatePoint.module.css';
 
 import FormInput from '../FormInput/FormInput';
 
-import { CreatePointFormProps, FormInputData } from "../../interfaces/pointInterfaces";
-import { createPointScehma } from '../../schemas/schemas';
+import { CreatePointFormProps, FormInputData } from "../../../interfaces/pointInterfaces";
+import { createPointScehma } from '../../../schemas/schemas';
 
 import { useFormik } from "formik";
 
