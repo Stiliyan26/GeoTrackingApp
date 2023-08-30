@@ -19,7 +19,7 @@ export default function Map() {
 	const { getPointsByUser, addPointByUser } = usePointContext();
 
 	const [pointsOfInterest, setPointsOfInterest] = useState<PointOfInterest[]>([]);
-	const [showForm, setShowForm] = useState<boolean>(false);
+	const [showCreateForm, setShowCreateForm] = useState<boolean>(false);
 	const [selectedPosition, setSelectedPosition] = useState<[number, number] | null>(null);
 	const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
 
@@ -46,8 +46,8 @@ export default function Map() {
 
 	//Changes the dragging effect base on whether the form is opened
 	useEffect(() => {
-		mapService.changeDragging(mapRef, showForm);
-	}, [showForm]);
+		mapService.changeDragging(mapRef, showCreateForm);
+	}, [showCreateForm]);
 
 	//Updates the pointsOfInterest and showFormState after creating new point
 	const handleFormSubmit = (formData: FormInputData) => {
@@ -56,7 +56,7 @@ export default function Map() {
 				selectedPosition,
 				formData,
 				setPointsOfInterest,
-				setShowForm,
+				setShowCreateForm,
 				addPointByUser,
 				username
 			);
@@ -68,7 +68,7 @@ export default function Map() {
 		useMapEvents({
 			click: (e) => {
 				setSelectedPosition([e.latlng.lat, e.latlng.lng]);
-				setShowForm(true);
+				setShowCreateForm(true);
 				setIsFirstRender(false);
 			}
 		});
@@ -78,7 +78,7 @@ export default function Map() {
 
 	function handleFormClose(e: MouseEvent) {
 		if (e.target === e.currentTarget) {
-			setShowForm(false);
+			setShowCreateForm(false);
 		}
 	}
 
@@ -96,15 +96,16 @@ export default function Map() {
 						url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 					/>
 
-					{/* Sets click event depending on showForm state */}
-					{!showForm && <MyMapEvents />}
+					{/* Sets click event depending on showCreateForm state */}
+					{!showCreateForm && 
+						<MyMapEvents />}
 
 					{/* Renders all use's points of interest */}
 					{pointsOfInterest.length > 0 &&
 						mapUIService.getAllPoints(pointsOfInterest)}
 
 					{/* Renders create form when  */}
-					{showForm && (
+					{showCreateForm && (
 						<CreatePoint
 							onCreate={handleFormSubmit}
 							onClose={handleFormClose}

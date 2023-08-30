@@ -5,7 +5,7 @@ import { getProperClassName } from '../../../../services/styleServices';
 import { useAuthContext } from '../../../../contexts/AuthContext';
 
 export default function ListLocation(
-	{ index, point, mapRef, isFirstRender, handleDelete }: ListLocationProps
+	{ index, point, mapRef, isFirstRender, handleShowDeleteDialog }: ListLocationProps
 ) {
 	const { username } = useAuthContext();
 
@@ -49,7 +49,13 @@ export default function ListLocation(
 				</button>
 
 				<button
-					onClick={() => handleDelete(point.id, username)}
+					className={styles['edit-btn']}
+				>
+					Edit
+				</button>
+
+				<button
+					onClick={(e) => handleShowDeleteDialog(point.id, username, e)}
 					className={styles['delete-btn']}
 				>
 					Delete

@@ -18,7 +18,7 @@
     transform: translate(-50%, -50%);
     color: var(--text-color);
     width: 380px;
-    font-family: 'Chela One', cursive;
+    font-family: var(--primary-font);
     display: flex;
     flex-direction: column;
 }

@@ -1,6 +1,7 @@
 import type { ReactNode, MouseEvent, MutableRefObject, SetStateAction, ChangeEvent } from 'react';
 
 import { FormikProps } from 'formik';
+import React from 'react';
 
 export interface PointOfInterest {
     id: string,
@@ -54,6 +55,7 @@ export interface PointContextType {
     addPointByUser: (newPoint: PointOfInterest, username: string) => void,
     getPointsByUser: (username: string) => PointOfInterest[]
     deletePointById: (id: string, username: string) => void;
+    getPointById: (id: string, username: string) => PointOfInterest | undefined;
 }
 
 export interface PointProviderProps {
@@ -75,7 +77,7 @@ export interface ListLocationProps {
     point: PointOfInterest,
     mapRef: MutableRefObject<L.Map | null>,
     isFirstRender: boolean,
-    handleDelete: (id: string, username: string) => void
+    handleShowDeleteDialog: (id: string, username: string, e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 export interface ListViewProps {
@@ -96,3 +98,14 @@ export type DeletePointFunction = (
     id: string,
     username: string
 ) => void;
+
+export type GetPointFunction = (
+    id: string,
+    username: string
+) => PointOfInterest | undefined;
+
+export interface DeleteDialogProps {
+    point: PointOfInterest,
+    handleDeletePoint: (id: string, username: string, e: React.MouseEvent<HTMLButtonElement>) => void,
+    handleCloseDialog: (e: React.MouseEvent<HTMLButtonElement  | HTMLDivElement>) => void;
+}

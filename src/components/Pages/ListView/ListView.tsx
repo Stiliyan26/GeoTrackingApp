@@ -4,9 +4,10 @@ import FilterSortBar from "./FilterSortBar/FilterSortBar";
 import ListLocation from './ListLocation/ListLocation';
 
 import { usePointContext } from '../../../contexts/PointContext';
-import { ListViewProps, PointOfInterestWithIndex } from '../../../interfaces/pointInterfaces';
+import { ListViewProps, PointOfInterest, PointOfInterestWithIndex } from '../../../interfaces/pointInterfaces';
 
 import { ChangeEvent, useMemo, useState } from 'react';
+import DeleteDialog from '../DeleteDialog/DeleteDialog';
 
 interface SortQueries {
     [key: string]: (
@@ -21,10 +22,12 @@ export default function ListView({
     isFirstRender,
     setPointsOfInterest
 }: ListViewProps) {
-    const { deletePointById } = usePointContext();
+    const { deletePointById, getPointById } = usePointContext();
 
     const [sortQuery, setSortQuery] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+    const [currentPoint, setCurrentPoint] = useState<PointOfInterest | undefined>(undefined);
 
     const handleSetSortQuery = (name: string) => {
         setSortQuery(name);
@@ -47,8 +50,17 @@ export default function ListView({
             a.index - b.index
     }
 
-    function handleDelete(id: string, username: string) {
+    function handleShowDeleteDialog(id: string, username: string, e: React.MouseEvent<HTMLButtonElement>) {
+        e.preventDefault();
+
+        setShowDeleteDialog(true);
         setIsFirstRender(false);
+        setCurrentPoint(getPointById(id, username));
+    }
+
+    function handleDeletePoint(id: string, username: string, e: React.MouseEvent<HTMLButtonElement>) {
+        e.preventDefault();
+
         setPointsOfInterest(prev => {
             let filteredPoints = prev;
 
@@ -57,20 +69,27 @@ export default function ListView({
 
             return filteredPoints;
         })
+
         deletePointById(id, username);
     }
 
-    const mapPointsToComponents = (points: PointOfInterestWithIndex[]) => 
+    function handleCloseDialog(e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>){
+        e.preventDefault();
+
+        setShowDeleteDialog(false);
+    }
+
+    const mapPointsToComponents = (points: PointOfInterestWithIndex[]) =>
         points.map((point, index) => (
             <ListLocation key={point.id}
                 index={index}
                 point={point}
                 mapRef={mapRef}
                 isFirstRender={isFirstRender}
-                handleDelete={handleDelete}
+                handleShowDeleteDialog={handleShowDeleteDialog}
             />
         ));
-            
+
     const getListOfLocations = useMemo(() => {
         const pointsOfInterestWithIndex = pointsOfInterest
             .map((point, index) => ({
@@ -89,8 +108,8 @@ export default function ListView({
             return mapPointsToComponents(sortedPoints);
         }
 
-        const filteredPoints = pointsOfInterestWithIndex.filter(point => 
-                point.name.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase()))
+        const filteredPoints = pointsOfInterestWithIndex.filter(point =>
+            point.name.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase()))
 
         return mapPointsToComponents(filteredPoints);
     }, [pointsOfInterest, sortQuery, searchQuery]);
@@ -109,6 +128,14 @@ export default function ListView({
                 {/* Renders list view */}
                 {getListOfLocations}
             </div>
+
+            {showDeleteDialog && !!currentPoint &&
+                <DeleteDialog 
+                    point={currentPoint} 
+                    handleDeletePoint={handleDeletePoint}
+                    handleCloseDialog={handleCloseDialog}
+                />
+            }
         </>
     )
 }

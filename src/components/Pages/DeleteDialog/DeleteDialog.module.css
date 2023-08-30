@@ -1,0 +1,73 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.dialog-container {
+    width: 500px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--text-color);
+    font-family: 'Chela One', cursive;
+    font-size: 1.5em;
+    background-color: var(--primary-color);
+    padding: 2em 3em;
+    border-radius: 2em;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+}
+
+.title-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+
+.confirm-btn,
+.cancel-btn {
+    padding: 0.5em 1.5em;
+    border-radius: 2em;
+    font-size: 1em;
+    font-family: var(--primary-font);
+    border: none;
+    color: var(--text-hover-color);
+    transition: all 0.3s ease-in-out;
+}
+
+.confirm-btn:hover,
+.cancel-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.confirm-btn {
+    background-color: #3a5a40;
+}
+
+.confirm-btn:hover {
+    background-color: #426549;
+}
+
+.cancel-btn {
+    background-color: #9e2a2b;
+}
+
+.cancel-btn:hover {
+    background-color: #a63234;
+}

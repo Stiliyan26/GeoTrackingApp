@@ -44,22 +44,22 @@ export const findUserLocation =
     }
 
 //Changes the dragging effect base on whether the form is opened
-export const changeDragging = (mapRef: RefObject<L.Map | null>, showForm: boolean): void => {
+export const changeDragging = (mapRef: RefObject<L.Map | null>, showFormOrDialog: boolean): void => {
     if (mapRef.current) {
         const mapInstance = mapRef.current;
 
-        showForm === true
+        showFormOrDialog === true
             ? mapInstance.dragging.disable()
             : mapInstance.dragging.enable();
     }
 }
 
-//Updates the pointsOfInterest and showForm states
+//Updates the pointsOfInterest and showCreateForm states
 export function handleFormSubmit(
     selectedPosition: [number, number] | null,
     formData: FormInputData,
     setPointsOfInterest: Dispatch<SetStateAction<PointOfInterest[]>>,
-    setShowForm: Dispatch<SetStateAction<boolean>>,
+    setShowCreateForm: Dispatch<SetStateAction<boolean>>,
     addPointByUser: AddPointByUserFunction,
     username: string
 ) {
@@ -75,7 +75,7 @@ export function handleFormSubmit(
         
         //Update local state
         setPointsOfInterest(prev => [...prev, newPointOfInterest]);
-        setShowForm(false);
+        setShowCreateForm(false);
         // Update local storage
         addPointByUser(newPointOfInterest, username);
     }
