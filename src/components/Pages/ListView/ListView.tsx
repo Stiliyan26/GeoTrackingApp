@@ -6,11 +6,11 @@ import DeleteDialog from '../DeleteDialog/DeleteDialog';
 
 import { usePointContext } from '../../../contexts/PointContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
-import { 
-    Action, 
-    FormInputData, 
-    ListViewProps, 
-    PointOfInterest, 
+import {
+    Action,
+    FormInputData,
+    ListViewProps,
+    PointOfInterest,
 } from '../../../interfaces/pointInterfaces';
 import * as mapService from '../../../services/mapService';
 
@@ -33,20 +33,17 @@ export default function ListView({
     const [showEditForm, setShowEditForm] = useState<boolean>(false);
     const [currentPoint, setCurrentPoint] = useState<PointOfInterest | undefined>(undefined);
 
-    //Marks that the first render has occurred and prevents the animation from resetting when points are changed. 
-    useEffect(() => {
-        setIsFirstRender(false);
-    }, [sortQuery, searchQuery, showDeleteDialog, showEditForm]);
-
     //Sets sort query and resets search query
     const handleSetSortQuery = (name: string) => {
         setSortQuery(name);
         setSearchQuery('');
+        setIsFirstRender(false);
     }
     //Sets search query and resets sort query
     function handleSearchChange(e: ChangeEvent<HTMLInputElement>) {
         setSearchQuery(e.target.value);
         setSortQuery('');
+        setIsFirstRender(false);
     }
     //Shows the dialog based on the action
     function handleShowDialog(
@@ -55,14 +52,15 @@ export default function ListView({
         e: React.MouseEvent<HTMLButtonElement>
     ): void {
         e.preventDefault();
-    
+
         if (action === Action.Delete) {
             setShowDeleteDialog(true);
         } else if (action === Action.Edit) {
             setShowEditForm(true);
         }
-    
+
         setCurrentPoint(point);
+        setIsFirstRender(false);
     }
     //Closes the dialog depending on wich one is open
     function handleCloseDialog(e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) {
@@ -73,6 +71,8 @@ export default function ListView({
         if (showEditForm && e.target === e.currentTarget) {
             setShowEditForm(false);
         }
+
+        setIsFirstRender(false);
     }
     //Updates pointsOfInterest state and localStorage points
     function handleDeletePoint(id: string, username: string, e: React.MouseEvent<HTMLButtonElement>) {
