@@ -59,7 +59,7 @@ export default function FilterSortBar({
 					onChange={handleSearchChange}
 					className={styles['search-inp']}
 					type='text'
-					placeholder='Seach by name'
+					placeholder='Seach by category'
 					name='search-inp'
 					value={searchQuery}
 				/>

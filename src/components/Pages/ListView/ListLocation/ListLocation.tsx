@@ -1,14 +1,16 @@
 import styles from './ListLocation.module.css';
 
-import { ListLocationProps } from "../../../../interfaces/pointInterfaces";
+import { Action, ListLocationProps } from "../../../../interfaces/pointInterfaces";
 import { getProperClassName } from '../../../../services/styleServices';
-import { useAuthContext } from '../../../../contexts/AuthContext';
 
-export default function ListLocation(
-	{ index, point, mapRef, isFirstRender, handleShowDeleteDialog }: ListLocationProps
+export default function ListLocation({ 
+		index,
+		point, 
+		mapRef, 
+		isFirstRender, 
+		handleShowDialog
+}: ListLocationProps
 ) {
-	const { username } = useAuthContext();
-
 	const showCoordinates = () => {
 		return `[${point.position[0].toFixed(2)}, ${point.position[1].toFixed(2)}]`
 	}
@@ -49,13 +51,14 @@ export default function ListLocation(
 				</button>
 
 				<button
+					onClick={(e) => handleShowDialog(Action.Edit ,point, e)}
 					className={styles['edit-btn']}
 				>
 					Edit
 				</button>
 
 				<button
-					onClick={(e) => handleShowDeleteDialog(point.id, username, e)}
+					onClick={(e) => handleShowDialog(Action.Delete, point, e)}
 					className={styles['delete-btn']}
 				>
 					Delete

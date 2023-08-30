@@ -1,19 +1,20 @@
 import styles from './ListView.module.css';
 
 import FilterSortBar from "./FilterSortBar/FilterSortBar";
-import ListLocation from './ListLocation/ListLocation';
-
-import { usePointContext } from '../../../contexts/PointContext';
-import { ListViewProps, PointOfInterest, PointOfInterestWithIndex } from '../../../interfaces/pointInterfaces';
-
-import { ChangeEvent, useMemo, useState } from 'react';
+import EditPoint from '../../Forms/EditPoint/EditPoint';
 import DeleteDialog from '../DeleteDialog/DeleteDialog';
 
-interface SortQueries {
-    [key: string]: (
-        a: PointOfInterestWithIndex,
-        b: PointOfInterestWithIndex) => number;
-}
+import { usePointContext } from '../../../contexts/PointContext';
+import { useAuthContext } from '../../../contexts/AuthContext';
+import { 
+    Action, 
+    FormInputData, 
+    ListViewProps, 
+    PointOfInterest, 
+} from '../../../interfaces/pointInterfaces';
+import * as mapService from '../../../services/mapService';
+
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 
 export default function ListView({
     setIsFirstRender,
@@ -22,96 +23,95 @@ export default function ListView({
     isFirstRender,
     setPointsOfInterest
 }: ListViewProps) {
-    const { deletePointById, getPointById } = usePointContext();
+    const { deletePointById, editPointById } = usePointContext();
+    const { username } = useAuthContext();
 
     const [sortQuery, setSortQuery] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState<string>('');
+
     const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+    const [showEditForm, setShowEditForm] = useState<boolean>(false);
     const [currentPoint, setCurrentPoint] = useState<PointOfInterest | undefined>(undefined);
 
+    //Marks that the first render has occurred and prevents the animation from resetting when points are changed. 
+    useEffect(() => {
+        setIsFirstRender(false);
+    }, [sortQuery, searchQuery, showDeleteDialog, showEditForm]);
+
+    //Sets sort query and resets search query
     const handleSetSortQuery = (name: string) => {
         setSortQuery(name);
         setSearchQuery('');
-        setIsFirstRender(false);
     }
-
+    //Sets search query and resets sort query
     function handleSearchChange(e: ChangeEvent<HTMLInputElement>) {
         setSearchQuery(e.target.value);
         setSortQuery('');
-        setIsFirstRender(false);
     }
-
-    const sortQueries: SortQueries = {
-        'category': (a: PointOfInterestWithIndex, b: PointOfInterestWithIndex) =>
-            a.category.localeCompare(b.category),
-        'name': (a: PointOfInterestWithIndex, b: PointOfInterestWithIndex) =>
-            a.name.localeCompare(b.name),
-        'default': (a: PointOfInterestWithIndex, b: PointOfInterestWithIndex) =>
-            a.index - b.index
-    }
-
-    function handleShowDeleteDialog(id: string, username: string, e: React.MouseEvent<HTMLButtonElement>) {
+    //Shows the dialog based on the action
+    function handleShowDialog(
+        action: Action,
+        point: PointOfInterest,
+        e: React.MouseEvent<HTMLButtonElement>
+    ): void {
         e.preventDefault();
-
-        setShowDeleteDialog(true);
-        setIsFirstRender(false);
-        setCurrentPoint(getPointById(id, username));
+    
+        if (action === Action.Delete) {
+            setShowDeleteDialog(true);
+        } else if (action === Action.Edit) {
+            setShowEditForm(true);
+        }
+    
+        setCurrentPoint(point);
     }
+    //Closes the dialog depending on wich one is open
+    function handleCloseDialog(e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) {
+        if (showDeleteDialog) {
+            setShowDeleteDialog(false);
+        }
 
+        if (showEditForm && e.target === e.currentTarget) {
+            setShowEditForm(false);
+        }
+    }
+    //Updates pointsOfInterest state and localStorage points
     function handleDeletePoint(id: string, username: string, e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
 
-        setPointsOfInterest(prev => {
-            let filteredPoints = prev;
-
-            filteredPoints = filteredPoints
-                .filter(point => point.id !== id)
-
-            return filteredPoints;
-        })
-
-        deletePointById(id, username);
+        mapService
+            .handleDeletePoint(
+                setPointsOfInterest,
+                deletePointById,
+                id,
+                username
+            );
+    }
+    //Sets showEditForm, pointsOfInterest state and localStorage points
+    function handleEditFormSubmit(formData: FormInputData) {
+        if (currentPoint !== undefined && currentPoint.id !== undefined) {
+            mapService
+                .handleEditFormSubmit(
+                    setShowEditForm,
+                    setPointsOfInterest,
+                    editPointById,
+                    currentPoint.id,
+                    username,
+                    formData
+                )
+        }
     }
 
-    function handleCloseDialog(e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>){
-        e.preventDefault();
-
-        setShowDeleteDialog(false);
-    }
-
-    const mapPointsToComponents = (points: PointOfInterestWithIndex[]) =>
-        points.map((point, index) => (
-            <ListLocation key={point.id}
-                index={index}
-                point={point}
-                mapRef={mapRef}
-                isFirstRender={isFirstRender}
-                handleShowDeleteDialog={handleShowDeleteDialog}
-            />
-        ));
-
+    //Retrives pointsOfInterest based on the search and sort query
     const getListOfLocations = useMemo(() => {
-        const pointsOfInterestWithIndex = pointsOfInterest
-            .map((point, index) => ({
-                ...point,
-                index
-            }))
-
-        if (!sortQuery && !searchQuery) {
-            return mapPointsToComponents(pointsOfInterestWithIndex);
-        }
-
-        if (!!sortQuery && sortQueries.hasOwnProperty(sortQuery)) {
-            const sortedPoints = pointsOfInterestWithIndex
-                .sort(sortQueries[sortQuery]);
-
-            return mapPointsToComponents(sortedPoints);
-        }
-
-        const filteredPoints = pointsOfInterestWithIndex.filter(point =>
-            point.name.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase()))
-
-        return mapPointsToComponents(filteredPoints);
+        return mapService
+            .getListLocations(
+                pointsOfInterest,
+                sortQuery,
+                searchQuery,
+                mapRef,
+                isFirstRender,
+                handleShowDialog
+            );
     }, [pointsOfInterest, sortQuery, searchQuery]);
 
     return (
@@ -129,13 +129,19 @@ export default function ListView({
                 {getListOfLocations}
             </div>
 
+            {showEditForm && !!currentPoint &&
+                <EditPoint
+                    onSubmit={handleEditFormSubmit}
+                    onClose={handleCloseDialog}
+                    pointInfo={currentPoint}
+                />}
+
             {showDeleteDialog && !!currentPoint &&
-                <DeleteDialog 
-                    point={currentPoint} 
+                <DeleteDialog
+                    point={currentPoint}
                     handleDeletePoint={handleDeletePoint}
                     handleCloseDialog={handleCloseDialog}
-                />
-            }
+                />}
         </>
     )
 }

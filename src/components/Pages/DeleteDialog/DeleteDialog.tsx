@@ -1,6 +1,8 @@
-import { useAuthContext } from '../../../contexts/AuthContext';
-import { DeleteDialogProps } from '../../../interfaces/pointInterfaces';
 import styles from './DeleteDialog.module.css';
+
+import { useAuthContext } from '../../../contexts/AuthContext';
+
+import { DeleteDialogProps } from '../../../interfaces/pointInterfaces';
 
 export default function DeleteDialog({
   point,

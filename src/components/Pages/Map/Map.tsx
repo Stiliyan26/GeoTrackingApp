@@ -11,7 +11,7 @@ import * as mapUIService from '../../../services/mapUIService';
 import { FormInputData, PointOfInterest, Coordinates } from '../../../interfaces/pointInterfaces';
 
 import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
-import { useState, MouseEvent, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useAuthContext } from '../../../contexts/AuthContext';
 
 export default function Map() {
@@ -50,9 +50,9 @@ export default function Map() {
 	}, [showCreateForm]);
 
 	//Updates the pointsOfInterest and showFormState after creating new point
-	const handleFormSubmit = (formData: FormInputData) => {
+	const handleCreateFormSubmit = (formData: FormInputData) => {
 		mapService
-			.handleFormSubmit(
+			.handleCreateFormSubmit(
 				selectedPosition,
 				formData,
 				setPointsOfInterest,
@@ -60,8 +60,6 @@ export default function Map() {
 				addPointByUser,
 				username
 			);
-
-		setIsFirstRender(false);
 	}
 
 	function MyMapEvents() {
@@ -76,7 +74,7 @@ export default function Map() {
 		return null;
 	}
 
-	function handleFormClose(e: MouseEvent) {
+	function handleFormClose(e: React.MouseEvent<HTMLButtonElement  | HTMLDivElement>) {
 		if (e.target === e.currentTarget) {
 			setShowCreateForm(false);
 		}
@@ -107,7 +105,7 @@ export default function Map() {
 					{/* Renders create form when  */}
 					{showCreateForm && (
 						<CreatePoint
-							onCreate={handleFormSubmit}
+							onSubmit={handleCreateFormSubmit}
 							onClose={handleFormClose}
 						/>
 					)}

@@ -1,6 +1,14 @@
+import { MutableRefObject } from "react";
+import ListLocation from "../components/Pages/ListView/ListLocation/ListLocation";
 import LocationInterestPoint from "../components/Pages/LocationInterestPoint/LocationInterestPoint";
 
-import { Coordinates, PointOfInterest } from "../interfaces/pointInterfaces";
+import { 
+    Coordinates, 
+    HandleShowDialogFunction, 
+    PointOfInterest, 
+    PointOfInterestWithIndex, 
+    SortQueries
+} from "../interfaces/pointInterfaces";
 import { Popup } from "react-leaflet";
 
 import styled from "styled-components";
@@ -39,7 +47,7 @@ export const getAllPoints = (pointsOfInterest: PointOfInterest[]) => {
         ));
 }
 
-//Returns styles popup
+//Returns styled popup
 export const StyledPopup = styled(Popup)`
         a.leaflet-popup-close-button {
             color: red;
@@ -65,6 +73,35 @@ export const StyledPopup = styled(Popup)`
         }
     `;
 
+
 export const genereteRandomKey =() => {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
+//Maps the point to components 
+export const mapPointsToComponents = (
+    points: PointOfInterestWithIndex[],
+    mapRef: MutableRefObject<L.Map | null>,
+    isFirstRender: boolean,
+    handleShowDialog: HandleShowDialogFunction
+) => 
+    points.map((point, index) => (
+        <ListLocation key={point.id}
+            index={index}
+            point={point}
+            mapRef={mapRef}
+            isFirstRender={isFirstRender}
+            handleShowDialog={handleShowDialog}
+        />
+));
+
+//Retrieves the sorting expressions
+export const sortQueries: SortQueries = {
+    'category': (a: PointOfInterestWithIndex, b: PointOfInterestWithIndex) =>
+        a.category.localeCompare(b.category),
+    'name': (a: PointOfInterestWithIndex, b: PointOfInterestWithIndex) =>
+        a.name.localeCompare(b.name),
+    'default': (a: PointOfInterestWithIndex, b: PointOfInterestWithIndex) =>
+        a.index - b.index
+}
+
+

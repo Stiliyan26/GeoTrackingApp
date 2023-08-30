@@ -4,8 +4,8 @@ import {
     PointProviderProps,
     AddPointByUserFunction, 
     DeletePointFunction,
-    PointOfInterest,
-    GetPointFunction
+    EditPointFunction,
+    FormInputData
 } from "../interfaces/pointInterfaces";
 
 import usePointLocalStorage from "../hooks/usePointLocalStorage";
@@ -17,7 +17,7 @@ const initialValue = {};
 export const PointProvider: React.FC<PointProviderProps> = ({
     children
 }) => {
-    const [points, addPoint, deletePoint, getPoint] = usePointLocalStorage('points', initialValue);
+    const [points, addPoint, deletePoint, editPoint] = usePointLocalStorage('points', initialValue);
 
     const addPointByUser: AddPointByUserFunction
         = (newPoint, username) => addPoint(newPoint, username);
@@ -31,15 +31,16 @@ export const PointProvider: React.FC<PointProviderProps> = ({
     const deletePointById: DeletePointFunction
         = (id: string, username: string) => deletePoint(id, username);
 
-    const getPointById: GetPointFunction
-        = (id: string, username: string) => getPoint(id, username);
+    const editPointById: EditPointFunction
+        = (pointInfo: FormInputData, pointId: string, username: string) =>
+             editPoint(pointInfo, pointId, username);
 
     const contextValue = {
         points,
         addPointByUser,
         getPointsByUser,
         deletePointById,
-        getPointById
+        editPointById
     }
 
     return (

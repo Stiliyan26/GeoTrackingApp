@@ -1,24 +1,61 @@
-import type { ReactNode, MouseEvent, MutableRefObject, SetStateAction, ChangeEvent } from 'react';
+import type { ReactNode, MutableRefObject, SetStateAction, ChangeEvent } from 'react';
 
 import { FormikProps } from 'formik';
 import React from 'react';
 
-export interface PointOfInterest {
-    id: string,
-    position: [number, number],
-    name: string,
-    description: string,
-    category: string,
-    imageUrl: string
+//enums
+
+export enum Action {
+    Delete = 'delete',
+    Edit = 'edit'
 }
 
-export interface PointOfInterestWithIndex extends PointOfInterest{
+//types 
+export type PointsLocalStorage = {
+    [username: string]: PointOfInterest[]
+}
+
+export type AddPointByUserFunction = (
+    newPoint: PointOfInterest,
+    username: string
+) => void;
+
+export type DeletePointFunction = (
+    id: string,
+    username: string
+) => void;
+
+export type EditPointFunction = (
+    pointInfo: FormInputData,
+    pointId: string,
+    username: string
+) => void;
+
+//interfaces
+
+export type HandleShowDialogFunction = (
+    action: Action,
+    point: PointOfInterest,
+    e: React.MouseEvent<HTMLButtonElement>
+) => void;
+
+export interface PointOfInterest extends FormInputData {
+    id?: string,
+    position: [number, number],
+}
+
+export interface PointOfInterestWithIndex extends PointOfInterest {
     index: number
 }
 
-export interface CreatePointFormProps {
-    onCreate: (formData: FormInputData) => void,
-    onClose: (e: MouseEvent) => void
+export interface SourceFormProps {
+    onSubmit: (formData: FormInputData) => void,
+    onClose: (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => void,
+    pointInfo?: FormInputData | undefined
+}
+
+export interface FormProps extends SourceFormProps {
+    sourcePage?: string,
 }
 
 export interface FormInputProps {
@@ -46,26 +83,18 @@ export interface Coordinates {
     longitude: number
 }
 
-export type PointsLocalStorage = {
-    [username: string]: PointOfInterest[]
-}
 
 export interface PointContextType {
     points: PointsLocalStorage,
     addPointByUser: (newPoint: PointOfInterest, username: string) => void,
     getPointsByUser: (username: string) => PointOfInterest[]
     deletePointById: (id: string, username: string) => void;
-    getPointById: (id: string, username: string) => PointOfInterest | undefined;
+    editPointById: (pointInfo: FormInputData, pointId: string, username: string) => void
 }
 
 export interface PointProviderProps {
     children: ReactNode
 }
-
-export type AddPointByUserFunction = (
-    newPoint: PointOfInterest,
-    username: string
-) => void;
 
 export interface PointOfInterestProps {
     point: PointOfInterest,
@@ -77,7 +106,10 @@ export interface ListLocationProps {
     point: PointOfInterest,
     mapRef: MutableRefObject<L.Map | null>,
     isFirstRender: boolean,
-    handleShowDeleteDialog: (id: string, username: string, e: React.MouseEvent<HTMLButtonElement>) => void
+    handleShowDialog: (
+        action: Action,
+        point: PointOfInterest,
+        e: React.MouseEvent<HTMLButtonElement>) => void,
 }
 
 export interface ListViewProps {
@@ -89,23 +121,20 @@ export interface ListViewProps {
 }
 
 export interface FilterSortBarProps {
-    handleSetSortQuery: (name: string) => void; 
+    handleSetSortQuery: (name: string) => void;
     handleSearchChange: (e: ChangeEvent<HTMLInputElement>) => void;
     searchQuery: string
 }
 
-export type DeletePointFunction = (
-    id: string,
-    username: string
-) => void;
-
-export type GetPointFunction = (
-    id: string,
-    username: string
-) => PointOfInterest | undefined;
-
 export interface DeleteDialogProps {
     point: PointOfInterest,
     handleDeletePoint: (id: string, username: string, e: React.MouseEvent<HTMLButtonElement>) => void,
-    handleCloseDialog: (e: React.MouseEvent<HTMLButtonElement  | HTMLDivElement>) => void;
+    handleCloseDialog: (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
 }
+
+export interface SortQueries {
+    [key: string]: (
+        a: PointOfInterestWithIndex,
+        b: PointOfInterestWithIndex) => number;
+}
+

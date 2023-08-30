@@ -1,4 +1,4 @@
-import { PointOfInterest, PointsLocalStorage } from "../interfaces/pointInterfaces";
+import { FormInputData, PointOfInterest, PointsLocalStorage } from "../interfaces/pointInterfaces";
 
 import { useState, useEffect } from "react";
 
@@ -28,7 +28,7 @@ function usePointLocalStorage(key: string, initialValue: PointsLocalStorage) {
         try {
             setPoints(prev => {
                 const updatedPoints = { ...prev };
-                
+
                 if (updatedPoints[username] === undefined) {
                     updatedPoints[username] = [];
                 }
@@ -47,7 +47,7 @@ function usePointLocalStorage(key: string, initialValue: PointsLocalStorage) {
             setPoints(prev => {
                 const filteredPoints = { ...prev };
 
-                if (filteredPoints[username] !== undefined){
+                if (filteredPoints[username] !== undefined) {
                     filteredPoints[username] = filteredPoints[username]
                         .filter(point => point.id !== id);
                 }
@@ -59,16 +59,35 @@ function usePointLocalStorage(key: string, initialValue: PointsLocalStorage) {
         }
     }
 
-    const getPoint = (id: string, username: string) => {
-        return points[username]
-            .find(point => point.id === id);
+    const editPoint = (pointInfo: FormInputData, pointId: string,  username: string) => {
+        try {
+            setPoints(prev => {
+                const updatedPoints = { ...prev };
+
+                if (updatedPoints[username] !== undefined) {
+                    const pointToUpdate = updatedPoints[username]
+                        .find(point => point.id === pointId);
+
+                    if (pointToUpdate !== undefined) {
+                        pointToUpdate.name = pointInfo.name;
+                        pointToUpdate.category = pointInfo.category,
+                        pointToUpdate.description = pointInfo.description,
+                        pointToUpdate.imageUrl = pointInfo.imageUrl
+                    }
+                }
+
+                return updatedPoints;
+            })
+        } catch (error) {
+            console.error((error as Error).message);
+        }
     }
 
     return [
         points,
         addPoint,
         deletePoint,
-        getPoint
+        editPoint
     ] as const;
 }
 
