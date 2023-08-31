@@ -1,6 +1,6 @@
 .main-container {
     width: 100%;
-    min-height: 90dvh;
+    min-height: calc(100vh - 200px);
     background-image: url('/images/background3.jpg');
     background-size: cover;
     background-position: center center;
@@ -24,4 +24,19 @@
     z-index: -1;
     background-color: black;
     opacity: 0.4;
+}
+
+.cluster-icon {
+    height: 2.2rem;
+    width: 2.2rem;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: #fff;
+    transform: translate(-25%, -25%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 1000;
+    font-size: 1.2rem;
+    outline: 3px solid black;
 }

@@ -2,16 +2,18 @@ import { MutableRefObject } from "react";
 import ListLocation from "../components/Pages/ListView/ListLocation/ListLocation";
 import LocationInterestPoint from "../components/Pages/LocationInterestPoint/LocationInterestPoint";
 
-import { 
-    Coordinates, 
-    HandleShowDialogFunction, 
-    PointOfInterest, 
-    PointOfInterestWithIndex, 
+import {
+    Coordinates,
+    HandleShowDialogFunction,
+    PointOfInterest,
+    PointOfInterestWithIndex,
     SortQueries
 } from "../interfaces/pointInterfaces";
 import { Popup } from "react-leaflet";
 
 import styled from "styled-components";
+import MarkerClusterGroup from "react-leaflet-cluster";
+import { divIcon, point } from "leaflet";
 
 //Returns user current location point
 export const getUserPoint = (
@@ -34,17 +36,31 @@ export const getUserPoint = (
     )
 }
 
+const createCustomClusterIcon = (cluster: any) => {
+    return divIcon({
+        html: `<div class="cluster-icon">${cluster.getChildCount()}</div>`,
+        className: 'custom-marker-cluster',
+        iconSize: point(33, 33, true),
+    });
+};
+
 //Returns all location points of interest of the current user
 export const getAllPoints = (pointsOfInterest: PointOfInterest[]) => {
 
-    return pointsOfInterest
-        .map(point => (
-            <LocationInterestPoint 
-                key={genereteRandomKey()}
-                point={point}
-                isUserLocation={false}
-            />
-        ));
+    return (
+        <MarkerClusterGroup
+            chunkedLoading
+            iconCreateFunction={createCustomClusterIcon}
+        >
+            {pointsOfInterest
+                .map(point => (
+                    <LocationInterestPoint
+                        key={genereteRandomKey()}
+                        point={point}
+                        isUserLocation={false}
+                    />
+                ))}
+        </MarkerClusterGroup>)
 }
 
 //Returns styled popup
@@ -74,7 +90,7 @@ export const StyledPopup = styled(Popup)`
     `;
 
 
-export const genereteRandomKey =() => {
+export const genereteRandomKey = () => {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
 //Maps the point to components 
@@ -83,7 +99,7 @@ export const mapPointsToComponents = (
     mapRef: MutableRefObject<L.Map | null>,
     isFirstRender: boolean,
     handleShowDialog: HandleShowDialogFunction
-) => 
+) =>
     points.map((point, index) => (
         <ListLocation key={point.id}
             index={index}
@@ -92,7 +108,7 @@ export const mapPointsToComponents = (
             isFirstRender={isFirstRender}
             handleShowDialog={handleShowDialog}
         />
-));
+    ));
 
 //Retrieves the sorting expressions
 export const sortQueries: SortQueries = {
@@ -103,5 +119,7 @@ export const sortQueries: SortQueries = {
     'default': (a: PointOfInterestWithIndex, b: PointOfInterestWithIndex) =>
         a.index - b.index
 }
+
+
 
 

@@ -7,10 +7,12 @@ import CreatePoint from '../../Forms/CreatePoint/CreatePoint';
 import ListView from '../ListView/ListView';
 
 import * as mapService from '../../../services/mapService';
+import { initialPosition } from '../../../services/mapService'
 import * as mapUIService from '../../../services/mapUIService';
 import { FormInputData, PointOfInterest, Coordinates } from '../../../interfaces/pointInterfaces';
 
 import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
+
 import { useState, useRef, useEffect } from 'react';
 import { useAuthContext } from '../../../contexts/AuthContext';
 
@@ -18,15 +20,12 @@ export default function Map() {
 	const { username } = useAuthContext();
 	const { getPointsByUser, addPointByUser } = usePointContext();
 
+	const [userCoordinates, setUserCoordinates] = useState<Coordinates>(initialPosition);
 	const [pointsOfInterest, setPointsOfInterest] = useState<PointOfInterest[]>([]);
+
 	const [showCreateForm, setShowCreateForm] = useState<boolean>(false);
 	const [selectedPosition, setSelectedPosition] = useState<[number, number] | null>(null);
 	const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
-
-	const initialPosition: Coordinates
-		= { latitude: 42.6977, longitude: 23.3219 };
-
-	const [userCoordinates, setUserCoordinates] = useState<Coordinates>(initialPosition);
 
 	const mapRef = useRef<L.Map | null>(null);
 
@@ -35,7 +34,7 @@ export default function Map() {
 		//Retrives all points created by the user
 		setPointsOfInterest(getPointsByUser(username));
 		//Sets the current user location
-		mapService.findUserLocation(mapRef, initialPosition)
+		mapService.findUserLocation(mapRef, 13)
 			.then(coordinates => {
 				setUserCoordinates(coordinates);
 			})
@@ -74,7 +73,7 @@ export default function Map() {
 		return null;
 	}
 
-	function handleFormClose(e: React.MouseEvent<HTMLButtonElement  | HTMLDivElement>) {
+	function handleFormClose(e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) {
 		if (e.target === e.currentTarget) {
 			setShowCreateForm(false);
 		}
@@ -95,12 +94,14 @@ export default function Map() {
 					/>
 
 					{/* Sets click event depending on showCreateForm state */}
-					{!showCreateForm && 
+					{!showCreateForm &&
 						<MyMapEvents />}
 
 					{/* Renders all use's points of interest */}
+
 					{pointsOfInterest.length > 0 &&
 						mapUIService.getAllPoints(pointsOfInterest)}
+
 
 					{/* Renders create form when  */}
 					{showCreateForm && (
@@ -116,9 +117,9 @@ export default function Map() {
 
 				</MapContainer>
 			</section>
-			
+
 			<section className={styles['list-view']}>
-				<ListView 
+				<ListView
 					setIsFirstRender={setIsFirstRender}
 					pointsOfInterest={pointsOfInterest}
 					mapRef={mapRef}

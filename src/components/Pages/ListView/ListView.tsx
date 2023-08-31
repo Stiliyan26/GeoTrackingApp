@@ -14,7 +14,7 @@ import {
 } from '../../../interfaces/pointInterfaces';
 import * as mapService from '../../../services/mapService';
 
-import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, useMemo, useState } from 'react';
 
 export default function ListView({
     setIsFirstRender,
@@ -120,6 +120,7 @@ export default function ListView({
                 handleSetSortQuery={handleSetSortQuery}
                 handleSearchChange={handleSearchChange}
                 searchQuery={searchQuery}
+                mapRef={mapRef}
             />
 
             <hr></hr>

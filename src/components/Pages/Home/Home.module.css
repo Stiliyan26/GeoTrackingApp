@@ -1,5 +1,5 @@
 .home-container {
-    height: 100%;
+    min-height: calc(100vh - 100px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -7,7 +7,6 @@
     position: relative;
     margin-top: 20px;
 }
-
 
 .earth {
     width: 300px;
@@ -75,5 +74,17 @@
 
     100% {
         transform: perspective(1000px) rotateY(0deg) rotateX(15deg) translateY(-30px);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .earth {
+        width: 200px;
+        height: 200px;
+    }
+
+    .circle span {
+        font-size: 2rem;
+        transform: rotateY(calc(var(--i) * calc(360deg / 32))) translateZ(150px);
     }
 }

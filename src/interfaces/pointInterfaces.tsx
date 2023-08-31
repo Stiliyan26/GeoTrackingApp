@@ -1,4 +1,4 @@
-import type { ReactNode, MutableRefObject, SetStateAction, ChangeEvent } from 'react';
+import type { ReactNode, MutableRefObject, SetStateAction, ChangeEvent, Dispatch } from 'react';
 
 import { FormikProps } from 'formik';
 import React from 'react';
@@ -113,17 +113,18 @@ export interface ListLocationProps {
 }
 
 export interface ListViewProps {
-    setIsFirstRender: React.Dispatch<SetStateAction<boolean>>,
+    setIsFirstRender: Dispatch<SetStateAction<boolean>>,
     pointsOfInterest: PointOfInterest[],
     mapRef: MutableRefObject<L.Map | null>,
     isFirstRender: boolean,
-    setPointsOfInterest: React.Dispatch<SetStateAction<PointOfInterest[]>>
+    setPointsOfInterest: Dispatch<SetStateAction<PointOfInterest[]>>
 }
 
 export interface FilterSortBarProps {
     handleSetSortQuery: (name: string) => void;
     handleSearchChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    searchQuery: string
+    searchQuery: string,
+    mapRef: MutableRefObject<L.Map | null>
 }
 
 export interface DeleteDialogProps {
@@ -138,3 +139,7 @@ export interface SortQueries {
         b: PointOfInterestWithIndex) => number;
 }
 
+export interface SortOptions {
+	name: string,
+	label: string
+}

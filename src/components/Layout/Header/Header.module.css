@@ -89,3 +89,28 @@
         max-height: 100px;
     }
 }
+
+@media screen and (max-width: 768px) {
+    .header {
+        max-height: 150px;
+    }
+
+    .header__navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1em 0.5em;
+        align-items: center;
+        gap: 10px;
+    }
+    .navbar__options {
+        gap: 0.8rem;
+        font-size: 1em;
+    }
+    .img-container {
+        max-width: 80px;
+        max-height: 80px;
+    }
+    .img {
+        animation-duration: 3s;
+    }
+} 

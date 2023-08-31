@@ -1,5 +1,7 @@
 import styles from './ListLocation.module.css';
 
+import { handleLocate } from '../../../../services/mapService';
+
 import { Action, ListLocationProps } from "../../../../interfaces/pointInterfaces";
 import { getProperClassName } from '../../../../services/styleServices';
 
@@ -13,13 +15,6 @@ export default function ListLocation({
 ) {
 	const showCoordinates = () => {
 		return `[${point.position[0].toFixed(2)}, ${point.position[1].toFixed(2)}]`
-	}
-
-	// Centers selected location
-	function handleLocate() {
-		if (mapRef.current) {
-			mapRef.current.setView(point.position);
-		}
 	}
 
 	return (
@@ -45,7 +40,7 @@ export default function ListLocation({
 			</div>
 
 			<div className={styles['button-wrapper']}>
-				<button onClick={handleLocate} className={styles['locate-btn']}>
+				<button onClick={() => handleLocate(mapRef, point)} className={styles['locate-btn']}>
 					<span className={styles['btn-name']}>Locate</span>
 					<span className={styles['btn-coordinates']}>{showCoordinates()}</span>
 				</button>

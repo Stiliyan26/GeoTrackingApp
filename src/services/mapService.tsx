@@ -12,9 +12,12 @@ import {
 import { mapPointsToComponents, sortQueries } from "./mapUIService";
 import { genereteRandomKey } from "./mapUIService";
 
+export const initialPosition: Coordinates
+		= { latitude: 42.6977, longitude: 23.3219 };
+
 //Sets the current user location
 export const findUserLocation =
-    async (mapRef: RefObject<L.Map | null>, initialPosition: Coordinates): Promise<Coordinates> => {
+    async (mapRef: RefObject<L.Map | null>, zoom: number): Promise<Coordinates> => {
         const geoLocationOptions = {
             enableHighAccuracy: true,
             maximumAge: 10000,
@@ -28,7 +31,7 @@ export const findUserLocation =
                         if (mapRef.current) {
                             const { latitude, longitude } = position.coords;
 
-                            mapRef.current.setView([latitude, longitude], 13);
+                            mapRef.current.setView([latitude, longitude], zoom);
                             resolve({ latitude, longitude });
                         }
                     },
@@ -170,4 +173,16 @@ export const getListLocations = (
         return mapPointsToComponents(filteredPoints, mapRef, isFirstRender, handleShowDialog);
 }
 
+// Centers selected location on the map
+export function handleLocate(
+    mapRef: MutableRefObject<L.Map | null>,
+    point: PointOfInterest
+) {
+    if (mapRef.current) {
+        const targetPosition = point.position;
+        const zoomLevel = 16;
+
+        mapRef.current.setView(targetPosition, zoomLevel);
+    }
+}
 

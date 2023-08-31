@@ -1,20 +1,17 @@
 import styles from './FilterSortBar.module.css';
 
+import { findUserLocation } from '../../../../services/mapService';
 import { getClassNameByToggle } from '../../../../services/styleServices';
-import { FilterSortBarProps } from '../../../../interfaces/pointInterfaces';
+import { FilterSortBarProps, SortOptions } from '../../../../interfaces/pointInterfaces';
 
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
-interface SortOptions {
-	name: string,
-	label: string
-}
-
 export default function FilterSortBar({
 	handleSetSortQuery,
 	handleSearchChange,
-	searchQuery
+	searchQuery,
+	mapRef
 }: FilterSortBarProps) {
 	const [isActive, setIsActive] = useState<boolean>(false);
 
@@ -31,7 +28,7 @@ export default function FilterSortBar({
 					<span></span>{option.label}
 				</Link>
 			)
-			);
+		);
 
 	function handleToggle() {
 		setIsActive(prev => !prev);
@@ -66,6 +63,13 @@ export default function FilterSortBar({
 
 				<i className="fa-solid fa-magnifying-glass"></i>
 			</section>
+
+			<button
+				onClick={() => findUserLocation(mapRef, 13)}
+				className={styles['my-position-btn']}
+			>
+				Locate my position
+			</button>
 		</div>
 	)
 }
