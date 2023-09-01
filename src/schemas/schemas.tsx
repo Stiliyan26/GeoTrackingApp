@@ -27,5 +27,5 @@ export const createPointScehma = yup.object({
     imageUrl: yup.string()
         .required('Image Url is required!')
         .min(5, 'Category must be at least 5 characters!')
-        .max(10000, 'Category must less than 10 000 characters!')
+        .max(20000, 'Category must less than 20 000 characters!')
 });

@@ -5,12 +5,12 @@ import { handleLocate } from '../../../../services/mapService';
 import { Action, ListLocationProps } from "../../../../interfaces/pointInterfaces";
 import { getProperClassName } from '../../../../services/styleServices';
 
-export default function ListLocation({ 
-		index,
-		point, 
-		mapRef, 
-		isFirstRender, 
-		handleShowDialog
+export default function ListLocation({
+	index,
+	point,
+	mapRef,
+	isFirstRender,
+	handleShowDialog
 }: ListLocationProps
 ) {
 	const showCoordinates = () => {
@@ -46,7 +46,7 @@ export default function ListLocation({
 				</button>
 
 				<button
-					onClick={(e) => handleShowDialog(Action.Edit ,point, e)}
+					onClick={(e) => handleShowDialog(Action.Edit, point, e)}
 					className={styles['edit-btn']}
 				>
 					Edit
@@ -59,7 +59,7 @@ export default function ListLocation({
 					Delete
 				</button>
 			</div>
-
 		</section>
+
 	)
 }
