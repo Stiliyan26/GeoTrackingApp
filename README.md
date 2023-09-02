@@ -113,6 +113,14 @@
     <img  src="https://imageupload.io/ib/cvSkkOKirMpfWtB_1693569180.png" alt="deletes.png"/>
 </p>
 
+<pre>
+    When user zooms out, points that are close to each other form a marker
+    cluster that displays the exact number of locations that are in close proximity.
+</pre>
+<p>
+    <img  src="https://imageupload.io/ib/uWWI7uLG9FXWXbU_1693651787.jpg" alt="pointsNumber.jpg"/>
+</p>
+
 ## Tech Stack:
 ### Front-End
 <p></p>
