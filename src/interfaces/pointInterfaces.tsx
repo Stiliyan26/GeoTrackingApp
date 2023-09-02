@@ -31,23 +31,15 @@ export type EditPointFunction = (
     username: string
 ) => void;
 
-//interfaces
-
 export type HandleShowDialogFunction = (
     action: Action,
     point: PointOfInterest,
     e: React.MouseEvent<HTMLButtonElement>
 ) => void;
 
-export interface PointOfInterest extends FormInputData {
-    id?: string,
-    position: [number, number],
-}
+//interfaces
 
-export interface PointOfInterestWithIndex extends PointOfInterest {
-    index: number
-}
-
+//Props interfaces
 export interface SourceFormProps {
     onSubmit: (formData: FormInputData) => void,
     onClose: (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => void,
@@ -60,6 +52,50 @@ export interface FormProps extends SourceFormProps {
 
 export interface FormInputProps {
     formik: FormikProps<FormInputData>
+}
+
+export interface PointProviderProps {
+    children: ReactNode
+}
+
+export interface PointOfInterestProps {
+    point: PointOfInterest,
+    isUserLocation: boolean,
+}
+
+export interface ListLocationProps {
+    index: number
+    point: PointOfInterest,
+    handleShowDialog: (
+        action: Action,
+        point: PointOfInterest,
+        e: React.MouseEvent<HTMLButtonElement>) => void,
+}
+
+export interface FilterSortBarProps {
+    handleSetSortQuery: (name: string) => void;
+    handleSearchChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    searchQuery: string,
+}
+
+export interface DeleteDialogProps {
+    point: PointOfInterest,
+    handleDeletePoint: (id: string, username: string, e: React.MouseEvent<HTMLButtonElement>) => void,
+    handleCloseDialog: (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
+}
+
+export interface MapProviderProps {
+    children: ReactNode;
+}
+
+//others
+export interface PointOfInterest extends FormInputData {
+    id?: string,
+    position: [number, number],
+}
+
+export interface PointOfInterestWithIndex extends PointOfInterest {
+    index: number
 }
 
 export interface FormInputInfo {
@@ -83,7 +119,6 @@ export interface Coordinates {
     longitude: number
 }
 
-
 export interface PointContextType {
     points: PointsLocalStorage,
     addPointByUser: (newPoint: PointOfInterest, username: string) => void,
@@ -92,46 +127,6 @@ export interface PointContextType {
     editPointById: (pointInfo: FormInputData, pointId: string, username: string) => void
 }
 
-export interface PointProviderProps {
-    children: ReactNode
-}
-
-export interface PointOfInterestProps {
-    point: PointOfInterest,
-    isUserLocation: boolean,
-}
-
-export interface ListLocationProps {
-    index: number
-    point: PointOfInterest,
-    mapRef: MutableRefObject<L.Map | null>,
-    isFirstRender: boolean,
-    handleShowDialog: (
-        action: Action,
-        point: PointOfInterest,
-        e: React.MouseEvent<HTMLButtonElement>) => void,
-}
-
-export interface ListViewProps {
-    setIsFirstRender: Dispatch<SetStateAction<boolean>>,
-    pointsOfInterest: PointOfInterest[],
-    mapRef: MutableRefObject<L.Map | null>,
-    isFirstRender: boolean,
-    setPointsOfInterest: Dispatch<SetStateAction<PointOfInterest[]>>
-}
-
-export interface FilterSortBarProps {
-    handleSetSortQuery: (name: string) => void;
-    handleSearchChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    searchQuery: string,
-    mapRef: MutableRefObject<L.Map | null>
-}
-
-export interface DeleteDialogProps {
-    point: PointOfInterest,
-    handleDeletePoint: (id: string, username: string, e: React.MouseEvent<HTMLButtonElement>) => void,
-    handleCloseDialog: (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
-}
 
 export interface SortQueries {
     [key: string]: (
@@ -142,4 +137,17 @@ export interface SortQueries {
 export interface SortOptions {
 	name: string,
 	label: string
+}
+
+export interface MapContextType {
+    mapRef: MutableRefObject<L.Map | null>,
+    pointsOfInterest: PointOfInterest[];
+    setPointsOfInterest: Dispatch<SetStateAction<PointOfInterest[]>>;
+    isFirstRender: boolean;
+    setIsFirstRender: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface DialogState {
+    showDeleteDialog: boolean,
+    showEditForm: boolean,
 }

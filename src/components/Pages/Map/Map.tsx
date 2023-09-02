@@ -9,25 +9,26 @@ import ListView from '../ListView/ListView';
 import * as mapService from '../../../services/mapService';
 import { initialPosition } from '../../../services/mapService'
 import * as mapUIService from '../../../services/mapUIService';
-import { FormInputData, PointOfInterest, Coordinates } from '../../../interfaces/pointInterfaces';
+import { FormInputData, Coordinates } from '../../../interfaces/pointInterfaces';
 
 import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuthContext } from '../../../contexts/AuthContext';
+import { useMapContext } from '../../../contexts/MapContext';
 
 export default function Map() {
 	const { username } = useAuthContext();
 	const { getPointsByUser, addPointByUser } = usePointContext();
+	const { 
+		mapRef,
+		setIsFirstRender, 
+		pointsOfInterest, 
+		setPointsOfInterest } = useMapContext();
 
 	const [userCoordinates, setUserCoordinates] = useState<Coordinates>(initialPosition);
-	const [pointsOfInterest, setPointsOfInterest] = useState<PointOfInterest[]>([]);
-
 	const [showCreateForm, setShowCreateForm] = useState<boolean>(false);
 	const [selectedPosition, setSelectedPosition] = useState<[number, number] | null>(null);
-	const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
-
-	const mapRef = useRef<L.Map | null>(null);
 
 	//Sets all user points
 	useEffect(() => {
@@ -119,13 +120,7 @@ export default function Map() {
 			</section>
 
 			<section className={styles['list-view']}>
-				<ListView
-					setIsFirstRender={setIsFirstRender}
-					pointsOfInterest={pointsOfInterest}
-					mapRef={mapRef}
-					isFirstRender={isFirstRender}
-					setPointsOfInterest={setPointsOfInterest}
-				/>
+				<ListView />
 			</section>
 		</div>
 	)

@@ -6,13 +6,15 @@ import { FilterSortBarProps, SortOptions } from '../../../../interfaces/pointInt
 
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { useMapContext } from '../../../../contexts/MapContext';
 
 export default function FilterSortBar({
 	handleSetSortQuery,
 	handleSearchChange,
 	searchQuery,
-	mapRef
 }: FilterSortBarProps) {
+	const { mapRef } = useMapContext();
+
 	const [isActive, setIsActive] = useState<boolean>(false);
 
 	const sortOptions: SortOptions[] = [

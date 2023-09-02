@@ -4,15 +4,16 @@ import { handleLocate } from '../../../../services/mapService';
 
 import { Action, ListLocationProps } from "../../../../interfaces/pointInterfaces";
 import { getProperClassName } from '../../../../services/styleServices';
+import { useMapContext } from '../../../../contexts/MapContext';
 
 export default function ListLocation({
 	index,
 	point,
-	mapRef,
-	isFirstRender,
 	handleShowDialog
 }: ListLocationProps
 ) {
+	const { mapRef, isFirstRender} = useMapContext();
+
 	const showCoordinates = () => {
 		return `[${point.position[0].toFixed(2)}, ${point.position[1].toFixed(2)}]`
 	}

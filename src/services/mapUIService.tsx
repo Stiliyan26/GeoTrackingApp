@@ -96,16 +96,12 @@ export const genereteRandomKey = () => {
 //Maps the point to components 
 export const mapPointsToComponents = (
     points: PointOfInterestWithIndex[],
-    mapRef: MutableRefObject<L.Map | null>,
-    isFirstRender: boolean,
     handleShowDialog: HandleShowDialogFunction
 ) =>
     points.map((point, index) => (
         <ListLocation key={point.id}
             index={index}
             point={point}
-            mapRef={mapRef}
-            isFirstRender={isFirstRender}
             handleShowDialog={handleShowDialog}
         />
     ));

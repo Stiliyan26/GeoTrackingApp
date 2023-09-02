@@ -3,6 +3,7 @@ import {
     AddPointByUserFunction,
     Coordinates,
     DeletePointFunction,
+    DialogState,
     EditPointFunction,
     FormInputData,
     HandleShowDialogFunction,
@@ -91,14 +92,17 @@ export function handleCreateFormSubmit(
 
 //Updates pointsOfInterest and setShowEditForm states
 export function handleEditFormSubmit(
-    setShowEditForm: Dispatch<SetStateAction<boolean>>,
+    setDialogState: Dispatch<SetStateAction<DialogState>>,
     setPointsOfInterest: Dispatch<SetStateAction<PointOfInterest[]>>,
     editPointById: EditPointFunction,
     currentPointId: string,
     username: string,
     formData: FormInputData,
 ) {
-    setShowEditForm(false);
+    setDialogState(prev => ({
+        ...prev, showEditForm: false
+    }));
+    
     setPointsOfInterest(prev => {
         const updatedPoints = prev
             .map(point => {
@@ -145,8 +149,6 @@ export const getListLocations = (
     pointsOfInterest: PointOfInterest[],
     sortQuery: string,
     searchQuery: string,
-    mapRef: MutableRefObject<L.Map | null>,
-    isFirstRender: boolean,
     handleShowDialog: HandleShowDialogFunction
 ) => {
     const pointsOfInterestWithIndex = pointsOfInterest
@@ -156,21 +158,21 @@ export const getListLocations = (
             }))
 
         if (!sortQuery && !searchQuery) {
-            return mapPointsToComponents(pointsOfInterestWithIndex, mapRef, isFirstRender, handleShowDialog);
+            return mapPointsToComponents(pointsOfInterestWithIndex, handleShowDialog);
         }
 
         if (sortQuery && sortQueries.hasOwnProperty(sortQuery)) {
             const sortedPoints = pointsOfInterestWithIndex
                 .sort(sortQueries[sortQuery]);
 
-            return mapPointsToComponents(sortedPoints, mapRef, isFirstRender, handleShowDialog);
+            return mapPointsToComponents(sortedPoints, handleShowDialog);
         }
 
         const filteredPoints = pointsOfInterestWithIndex.filter(point =>
             point.category.trim().toLocaleLowerCase()
                 .includes(searchQuery.trim().toLocaleLowerCase()))
 
-        return mapPointsToComponents(filteredPoints, mapRef, isFirstRender, handleShowDialog);
+        return mapPointsToComponents(filteredPoints, handleShowDialog);
 }
 
 // Centers selected location on the map

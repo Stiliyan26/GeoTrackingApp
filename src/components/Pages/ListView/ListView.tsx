@@ -8,29 +8,31 @@ import { usePointContext } from '../../../contexts/PointContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import {
     Action,
+    DialogState,
     FormInputData,
-    ListViewProps,
     PointOfInterest,
 } from '../../../interfaces/pointInterfaces';
 import * as mapService from '../../../services/mapService';
 
 import { ChangeEvent, useMemo, useState } from 'react';
+import { useMapContext } from '../../../contexts/MapContext';
 
-export default function ListView({
-    setIsFirstRender,
-    pointsOfInterest,
-    mapRef,
-    isFirstRender,
-    setPointsOfInterest
-}: ListViewProps) {
+export default function ListView() {
     const { deletePointById, editPointById } = usePointContext();
     const { username } = useAuthContext();
+    const { 
+		setIsFirstRender, 
+		pointsOfInterest, 
+		setPointsOfInterest } = useMapContext();
 
     const [sortQuery, setSortQuery] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState<string>('');
 
-    const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
-    const [showEditForm, setShowEditForm] = useState<boolean>(false);
+    const [dialogState, setDialogState] = useState<DialogState>({
+        showDeleteDialog: false,
+        showEditForm: false,
+    })
+
     const [currentPoint, setCurrentPoint] = useState<PointOfInterest | undefined>(undefined);
 
     //Sets sort query and resets search query
@@ -54,9 +56,13 @@ export default function ListView({
         e.preventDefault();
 
         if (action === Action.Delete) {
-            setShowDeleteDialog(true);
+            setDialogState(prev => {
+                return { ...prev, showDeleteDialog: true }
+            });
         } else if (action === Action.Edit) {
-            setShowEditForm(true);
+            setDialogState(prev => {
+                return { ...prev, showEditForm: true }
+            });
         }
 
         setCurrentPoint(point);
@@ -64,12 +70,16 @@ export default function ListView({
     }
     //Closes the dialog depending on wich one is open
     function handleCloseDialog(e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) {
-        if (showDeleteDialog) {
-            setShowDeleteDialog(false);
+        if (dialogState.showDeleteDialog) {
+            setDialogState(prev => ({
+                ...prev, showDeleteDialog: false
+            }));
         }
 
-        if (showEditForm && e.target === e.currentTarget) {
-            setShowEditForm(false);
+        if (dialogState.showEditForm && e.target === e.currentTarget) {
+            setDialogState(prev => ({
+                ...prev, showEditForm: false
+            }));
         }
 
         setIsFirstRender(false);
@@ -91,7 +101,7 @@ export default function ListView({
         if (currentPoint !== undefined && currentPoint.id !== undefined) {
             mapService
                 .handleEditFormSubmit(
-                    setShowEditForm,
+                    setDialogState,
                     setPointsOfInterest,
                     editPointById,
                     currentPoint.id,
@@ -108,8 +118,6 @@ export default function ListView({
                 pointsOfInterest,
                 sortQuery,
                 searchQuery,
-                mapRef,
-                isFirstRender,
                 handleShowDialog
             );
     }, [pointsOfInterest, sortQuery, searchQuery]);
@@ -120,7 +128,6 @@ export default function ListView({
                 handleSetSortQuery={handleSetSortQuery}
                 handleSearchChange={handleSearchChange}
                 searchQuery={searchQuery}
-                mapRef={mapRef}
             />
 
             <hr></hr>
@@ -130,14 +137,14 @@ export default function ListView({
                 {getListOfLocations}
             </div>
 
-            {showEditForm && !!currentPoint &&
+            {dialogState.showEditForm && !!currentPoint &&
                 <EditPoint
                     onSubmit={handleEditFormSubmit}
                     onClose={handleCloseDialog}
                     pointInfo={currentPoint}
                 />}
 
-            {showDeleteDialog && !!currentPoint &&
+            {dialogState.showDeleteDialog && !!currentPoint &&
                 <DeleteDialog
                     point={currentPoint}
                     handleDeletePoint={handleDeletePoint}
