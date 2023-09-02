@@ -1,4 +1,4 @@
-# BurgerMasters Documentation 
+# Geo Tracking Application Documentation 
 <pre>
   This project involves developing a web application that allows users to view a map,create, edit,delete, and save points of interest,
   all while offering features like a login page for user authentication and a menu for easy navigation.
