@@ -1,4 +1,3 @@
-import { MutableRefObject } from "react";
 import ListLocation from "../components/Pages/ListView/ListLocation/ListLocation";
 import LocationInterestPoint from "../components/Pages/LocationInterestPoint/LocationInterestPoint";
 
