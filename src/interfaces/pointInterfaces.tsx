@@ -91,7 +91,7 @@ export interface MapProviderProps {
 
 //others
 export interface PointOfInterest extends FormInputData {
-    id?: string,
+    id: string,
     position: [number, number],
 }
 

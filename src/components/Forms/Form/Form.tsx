@@ -8,7 +8,9 @@ import { useFormik } from 'formik';
 import { createPointScehma } from '../../../schemas/schemas';
 import { Edit_FORM_NAME } from '../../../constants/gloabalConstants';
 
-export default function Form({ sourcePage, onSubmit, onClose, pointInfo }: FormProps) {
+export default function Form(
+    { sourcePage, onSubmit, onClose, pointInfo }: FormProps
+) {
     let initialValues: FormInputData = {
         name: '',
         category: '',

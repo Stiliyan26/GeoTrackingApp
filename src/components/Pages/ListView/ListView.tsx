@@ -85,7 +85,11 @@ export default function ListView() {
         setIsFirstRender(false);
     }
     //Updates pointsOfInterest state and localStorage points
-    function handleDeletePoint(id: string, username: string, e: React.MouseEvent<HTMLButtonElement>) {
+    function handleDeletePoint(
+        id: string,
+        username: string,
+        e: React.MouseEvent<HTMLButtonElement>
+    ) {
         e.preventDefault();
 
         mapService
@@ -137,19 +141,20 @@ export default function ListView() {
                 {getListOfLocations}
             </div>
 
-            {dialogState.showEditForm && !!currentPoint &&
-                <EditPoint
+            {dialogState.showEditForm && !!currentPoint
+                ? <EditPoint
                     onSubmit={handleEditFormSubmit}
                     onClose={handleCloseDialog}
-                    pointInfo={currentPoint}
-                />}
+                    pointInfo={currentPoint}/>
+                : null }
 
-            {dialogState.showDeleteDialog && !!currentPoint &&
-                <DeleteDialog
+            {dialogState.showDeleteDialog && !!currentPoint 
+                ? <DeleteDialog
                     point={currentPoint}
                     handleDeletePoint={handleDeletePoint}
                     handleCloseDialog={handleCloseDialog}
-                />}
+                />
+                : null}
         </>
     )
 }

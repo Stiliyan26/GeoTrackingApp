@@ -95,26 +95,28 @@ export default function Map() {
 					/>
 
 					{/* Sets click event depending on showCreateForm state */}
-					{!showCreateForm &&
-						<MyMapEvents />}
+					{!showCreateForm 
+						? <MyMapEvents />
+						: null}
 
-					{/* Renders all use's points of interest */}
+					{/* Renders all user's points of interest */}
 
-					{pointsOfInterest.length > 0 &&
-						mapUIService.getAllPoints(pointsOfInterest)}
+					{pointsOfInterest.length > 0 
+						? mapUIService.getAllPoints(pointsOfInterest)
+						: null}
 
 
 					{/* Renders create form when  */}
-					{showCreateForm && (
-						<CreatePoint
+					{showCreateForm 
+						? <CreatePoint
 							onSubmit={handleCreateFormSubmit}
-							onClose={handleFormClose}
-						/>
-					)}
+							onClose={handleFormClose} />
+						: null}
 
 					{/* Renders current user location  */}
 					{!!userCoordinates
-						&& mapUIService.getUserPoint(userCoordinates, username)}
+						? mapUIService.getUserPoint(userCoordinates, username)
+						: null}
 
 				</MapContainer>
 			</section>

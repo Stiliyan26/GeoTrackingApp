@@ -20,6 +20,7 @@ export const getUserPoint = (
     username: string,
 ) => {
     const pointInfo: PointOfInterest = {
+        id: genereteRandomKey(),
         position: [userCoordinates?.latitude, userCoordinates?.longitude],
         name: `${username}'s Location`,
         category: 'Current Location',
@@ -107,11 +108,11 @@ export const mapPointsToComponents = (
 
 //Retrieves the sorting expressions
 export const sortQueries: SortQueries = {
-    'category': (a: PointOfInterestWithIndex, b: PointOfInterestWithIndex) =>
+    category: (a: PointOfInterestWithIndex, b: PointOfInterestWithIndex) =>
         a.category.localeCompare(b.category),
-    'name': (a: PointOfInterestWithIndex, b: PointOfInterestWithIndex) =>
+    name: (a: PointOfInterestWithIndex, b: PointOfInterestWithIndex) =>
         a.name.localeCompare(b.name),
-    'default': (a: PointOfInterestWithIndex, b: PointOfInterestWithIndex) =>
+    default: (a: PointOfInterestWithIndex, b: PointOfInterestWithIndex) =>
         a.index - b.index
 }
 
