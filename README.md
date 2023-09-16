@@ -5,7 +5,7 @@
 </pre>
 
 
-## Demo: https://main--radiant-klepon-d29a89.netlify.app/
+## Demo: https://geo-tracking-app.netlify.app
 
 ## Why i chosed leaflet
 <pre>
