@@ -5,7 +5,7 @@
 </pre>
 
 
-## Demo: https://geo-tracking-app.netlify.app
+## Demo: https://geo-tracking-app.azurewebsites.net
 
 ## Why i chosed leaflet
 <pre>
